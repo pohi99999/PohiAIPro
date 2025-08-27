@@ -430,18 +430,7 @@ The response MUST ONLY contain the JSON object.`;
                                 <div key={match.id} className="p-2 bg-slate-700/50 rounded flex justify-between items-center text-xs">
                                     <div>
                                         <p className="font-bold">{match.demandDetails.productName}</p>
-<<<<<<< HEAD
-                                        <p>{match.stockDetails.uploadedByCompanyName} {'->'} {match.demandDetails.submittedByCompanyName}</p>
-=======
-                                        <div key={match.id} className="p-2 bg-slate-700/50 rounded flex justify-between items-center text-xs">
-                                    <div>
-                                        <p className="font-bold">{match.demandDetails.productName}</p>
                                         <p>{match.stockDetails.uploadedByCompanyName} &rarr; {match.demandDetails.submittedByCompanyName}</p>
-                                        <p className="text-cyan-400">{match.stockDetails.cubicMeters?.toFixed(2)} m³</p>
-                                    </div>
-                                    <Button size="sm" onClick={() => handleStageMatch(match.id)}>{t('commandCenter_stageButton')}</Button>
-                                </div>
->>>>>>> 46e110c15044f7d5a098d7381e24e7b226747da9
                                         <p className="text-cyan-400">{match.stockDetails.cubicMeters?.toFixed(2)} m³</p>
                                     </div>
                                     <Button size="sm" onClick={() => handleStageMatch(match.id)}>{t('commandCenter_stageButton')}</Button>

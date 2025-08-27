@@ -1,0 +1,4 @@
+[
+  { "id": "p1", "name": "Teszt termék A", "price": 123.45 },
+  { "id": "p2", "name": "Teszt termék B", "price": 67.89 }
+]

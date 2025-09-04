@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import {
   collection,
   query,
@@ -29,6 +29,7 @@ export interface UseCollectionQueryOptions {
 }
 
 // Hook to subscribe to a collection with optional constraints, pagination and retry/backoff.
+// IMPORTANT: `constraints` and `options` objects should be memoized by the caller to prevent re-renders.
 export function useCollectionQuery<T = DocumentData>(
   path: string,
   constraints: QueryConstraint[] = [],
@@ -41,6 +42,12 @@ export function useCollectionQuery<T = DocumentData>(
   const unsubRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
+    if (!path) {
+      setLoading(false);
+      setData(null);
+      return;
+    }
+
     let mounted = true;
     setLoading(true);
     setError(null);
@@ -51,7 +58,7 @@ export function useCollectionQuery<T = DocumentData>(
       combinedConstraints.push(limitFn(options.pageSize));
     }
 
-    const cacheKey = `${path}|${JSON.stringify(combinedConstraints.map(String))}|pageSize:${options.pageSize}`;
+    const cacheKey = `${path}|${JSON.stringify(combinedConstraints.map(c => c.toString()))}|pageSize:${options.pageSize}`;
 
     // If cache enabled and we have cached data, return it immediately.
     if (options.enableCache && collectionCache.has(cacheKey)) {
@@ -114,8 +121,7 @@ export function useCollectionQuery<T = DocumentData>(
         unsubRef.current = null;
       }
     };
-    // constraints might be non-serializable; stringify for dependency comparison
-  }, [path, JSON.stringify(constraints.map(String)), options.pageSize, !!options.enableCache, options.retry?.retries, options.retry?.initialDelayMs]);
+  }, [path, constraints, options]); // Rely on caller to memoize constraints and options
 
   return { data, loading, error };
 }
@@ -154,10 +160,10 @@ export function useUserRole(user: User | null) {
 }
 
 export function useNotifications(userId: string | null) {
-  const constraints = userId ? [where('userId', '==', userId), orderBy('timestamp', 'desc')] : [];
-  const { data: notifications, loading, error } = useCollectionQuery<Notification>('notifications', constraints, {
-    pageSize: 20, // Limit to the latest 20 notifications
-  });
+  const constraints = useMemo(() => (userId ? [where('userId', '==', userId), orderBy('timestamp', 'desc')] : []), [userId]);
+  const options = useMemo(() => ({ pageSize: 20 }), []);
+
+  const { data: notifications, loading, error } = useCollectionQuery<Notification>('notifications', constraints, options);
 
   const unreadCount = notifications?.filter(n => !n.isRead).length || 0;
 
@@ -165,27 +171,28 @@ export function useNotifications(userId: string | null) {
 }
 
 export function useConversations(userId: string | null) {
-  const constraints = userId ? [where('participantIds', 'array-contains', userId)] : [];
-  const { data: conversations, loading, error } = useCollectionQuery<Conversation>('conversations', constraints, {
-    pageSize: 50,
-  });
+  const constraints = useMemo(() => (userId ? [where('participantIds', 'array-contains', userId)] : []), [userId]);
+  const options = useMemo(() => ({ pageSize: 50 }), []);
+
+  const { data: conversations, loading, error } = useCollectionQuery<Conversation>('conversations', constraints, options);
 
   return { conversations, loading, error };
 }
 
 export function useMessages(conversationId: string | null) {
   const path = conversationId ? `conversations/${conversationId}/messages` : '';
-  const { data: messages, loading, error } = useCollectionQuery<ChatMessage>(path, [orderBy('timestamp', 'asc')], {
-    pageSize: 100,
-  });
+  const constraints = useMemo(() => [orderBy('timestamp', 'asc')], []);
+  const options = useMemo(() => ({ pageSize: 100 }), []);
+
+  const { data: messages, loading, error } = useCollectionQuery<ChatMessage>(path, constraints, options);
 
   return { messages, loading, error };
 }
 
 export function useUsers() {
-  const { data: users, loading, error } = useCollectionQuery<MockCompany>('users', [], {
-    pageSize: 100,
-  });
+  const constraints = useMemo(() => [], []);
+  const options = useMemo(() => ({ pageSize: 100 }), []);
+  const { data: users, loading, error } = useCollectionQuery<MockCompany>('users', constraints, options);
 
   return { users, loading, error };
 }
@@ -202,9 +209,9 @@ export function useGooglePicker({
   onPicked: (data: any) => void;
 }) {
   const [loaded, setLoaded] = useState(false);
-  const [pickerApi, setPickerApi] = useState<any>(null);
   const [oauthToken, setOauthToken] = useState<string | null>(null);
 
+  // Load the Google Picker API script
   useEffect(() => {
     const loadGis = () => {
       const script = document.createElement('script');
@@ -222,7 +229,7 @@ export function useGooglePicker({
     loadGis();
   }, []);
 
-  const createPicker = () => {
+  const createPicker = useCallback(() => {
     if (loaded && oauthToken) {
       const view = new window.google.picker.View(window.google.picker.ViewId.DOCS);
       const picker = new window.google.picker.PickerBuilder()
@@ -235,7 +242,7 @@ export function useGooglePicker({
         .build();
       picker.setVisible(true);
     }
-  };
+  }, [loaded, oauthToken, clientId, developerKey, onPicked]);
 
   const handleAuthClick = () => {
     const tokenClient = window.google.accounts.oauth2.initTokenClient({
@@ -252,7 +259,7 @@ export function useGooglePicker({
     if (oauthToken) {
       createPicker();
     }
-  }, [oauthToken]);
+  }, [oauthToken, createPicker]);
 
   return { handleAuthClick };
 }

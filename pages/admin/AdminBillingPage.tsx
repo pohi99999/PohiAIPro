@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useLocale } from '../../LocaleContext';
 import { ai } from '../../lib/gemini';
 import { GenerateContentResponse, Type } from "@google/genai";
-import { ConfirmedMatch, MockCompany, Shipment, ShipmentStatus, Invoice, InvoiceStatus, InvoiceLineItem, UserRole, CommissionSourceAnalysis, MarketPriceCommissionAdvice } from '../../types';
+import { ConfirmedMatch, MockCompany, Shipment, ShipmentStatus, Invoice, InvoiceStatus, InvoiceLineItem, CommissionSourceAnalysis, MarketPriceCommissionAdvice } from '../../types';
 import { SHIPMENTS_STORAGE_KEY, MOCK_COMPANIES_STORAGE_KEY, INVOICES_STORAGE_KEY, CONFIRMED_MATCHES_STORAGE_KEY } from '../../constants';
 import { getTranslatedInvoiceStatus, TranslationKey } from '../../locales';
 

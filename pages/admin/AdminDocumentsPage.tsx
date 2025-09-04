@@ -1,24 +1,38 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useGooglePicker } from '../../lib/hooks';
 
-// TODO: Replace with your actual Google Cloud project credentials
-const DEVELOPER_KEY = 'YOUR_DEVELOPER_KEY';
-const CLIENT_ID = 'YOUR_CLIENT_ID';
+// IMPORTANT: These values must be set in your .env.local file
+// VITE_GOOGLE_DEVELOPER_KEY=your_developer_key
+// VITE_GOOGLE_CLIENT_ID=your_client_id
+const DEVELOPER_KEY = import.meta.env.VITE_GOOGLE_DEVELOPER_KEY as string;
+const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID as string;
 
 const AdminDocumentsPage: React.FC = () => {
-  const onPicked = (data: any) => {
+  const onPicked = useCallback((data: any) => {
     if (data.action === 'picked') {
       const doc = data.docs[0];
       alert(`Document picked: ${doc.name}`);
       // TODO: Handle the picked document (e.g., save to Firestore)
+      console.log('Picked document:', doc);
     }
-  };
+  }, []);
 
   const { handleAuthClick } = useGooglePicker({
     developerKey: DEVELOPER_KEY,
     clientId: CLIENT_ID,
     onPicked,
   });
+
+  if (!DEVELOPER_KEY || !CLIENT_ID) {
+    return (
+      <div>
+        <h1>Document Management</h1>
+        <p className="text-red-500">
+          Google API keys are not configured. Please set VITE_GOOGLE_DEVELOPER_KEY and VITE_GOOGLE_CLIENT_ID in your .env.local file.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div>

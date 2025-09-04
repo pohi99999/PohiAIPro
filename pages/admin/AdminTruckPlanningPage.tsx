@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useLocale } from '../../LocaleContext';
 import { ai } from '../../lib/gemini';
 import { GenerateContentResponse, Type } from "@google/genai";
-import { ConfirmedMatch, MockCompany, Shipment, LoadingPlan, ShipmentStatus, CostEstimation, OptimizationTip, LoadingPlanItem } from '../../types';
+import { ConfirmedMatch, MockCompany, Shipment, LoadingPlan, ShipmentStatus, CostEstimation, OptimizationTip } from '../../types';
 import { CONFIRMED_MATCHES_STORAGE_KEY, MOCK_COMPANIES_STORAGE_KEY, SHIPMENTS_STORAGE_KEY } from '../../constants';
 import PageTitle from '../../components/PageTitle';
 import Card from '../../components/Card';
@@ -12,7 +12,7 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 import AiFeatureButton from '../../components/AiFeatureButton';
 import VisualTruckLoad from '../../components/VisualTruckLoad';
 import SimulatedRouteMap from '../../components/SimulatedRouteMap';
-import { ComputerDesktopIcon, TruckIcon, InboxStackIcon, Cog6ToothIcon, CheckCircleIcon, ArrowUturnLeftIcon, BanknotesIcon, LightBulbIcon, MapIcon } from '@heroicons/react/24/outline';
+import { ComputerDesktopIcon, InboxStackIcon, Cog6ToothIcon, CheckCircleIcon, ArrowUturnLeftIcon, BanknotesIcon, LightBulbIcon, MapIcon } from '@heroicons/react/24/outline';
 import Select from '../../components/Select';
 import type { TranslationKey } from '../../locales';
 
@@ -252,7 +252,7 @@ The response MUST ONLY contain the JSON object.`;
         } finally {
             setIsAiLoading({});
         }
-    }, [ai, stagedMatches, selectedTruck, totalStagedVolume, locale, companies, t]);
+    }, [stagedMatches, selectedTruck, totalStagedVolume, locale, companies, t]);
 
     useEffect(() => {
         if (isAwaitingPlanGeneration && stagedMatches.length > 0) {

@@ -1,6 +1,4 @@
 // types.ts
-declare const google: any;
-
 // TranslationKey is defined in locales.ts and should be imported from there directly.
 import type { TranslationKey } from './locales';
 import type { ReactNode } from 'react';

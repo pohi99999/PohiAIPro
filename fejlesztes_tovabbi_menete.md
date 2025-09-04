@@ -55,6 +55,22 @@
 
 ---
 
+#### **Kódminőség- és Biztonságjavítási Fázis (2025-09-04, Befejezve)**
+**Cél:** Az alkalmazás kódminőségének, karbantarthatóságának, biztonságának és logikájának proaktív javítása.
+
+**Cselekvési Lépések:**
+1.  **Kódminőség Javítása:** - **KÉSZ**
+    *   Minden (21 db) linter hiba javítva a kódbázisban.
+    *   A központi React hook-ok (`useCollectionQuery`, `useGooglePicker`) refaktorálva lettek a teljesítmény és a logikai helyesség javítása érdekében.
+2.  **Biztonsági Frissítések:** - **KÉSZ**
+    *   9 sebezhetőség (köztük 4 kritikus) javítva a projekt függőségeinek frissítésével (`npm audit`).
+3.  **Konfiguráció Javítása:** - **KÉSZ**
+    *   A merevkódolt API kulcsok eltávolításra kerültek, helyettük biztonságos, környezeti változókon alapuló megoldás lett implementálva.
+4.  **Ellenőrzés:** - **KÉSZ**
+    *   Minden változtatás ellenőrizve lett a meglévő tesztcsomaggal, amely továbbra is sikeresen lefut.
+
+---
+
 ### **Összegzés és Következő Lépések**
 
-A rendszer sikeresen át lett állítva egy modern, Firebase-alapú backendre. A következő nagy lépés a mesterséges intelligencia képességek mélyebb integrálása a 2. Fázisban leírtak szerint.
+A rendszer sikeresen át lett állítva egy modern, Firebase-alapú backendre. A kódminőség és biztonság jelentősen javult. A következő nagy lépés a mesterséges intelligencia képességek mélyebb integrálása a 2. Fázisban leírtak szerint.

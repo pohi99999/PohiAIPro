@@ -10,21 +10,19 @@ import {
     StockItem,
     DemandStatus,
     StockStatus,
-    ConfirmedMatch 
+    ConfirmedMatch
 } from '../../types';
-import { TranslationKey, getTranslatedDemandStatus, getTranslatedStockStatus } from '../../locales';
 import {
     ArrowsRightLeftIcon,
     CheckCircleIcon,
     UserGroupIcon,
     BuildingStorefrontIcon
 } from '@heroicons/react/24/outline';
-import { GenerateContentResponse, Type } from "@google/genai";
+import { Type } from "@google/genai";
 import { useLocale } from '../../LocaleContext';
-import { CUSTOMER_DEMANDS_STORAGE_KEY, MANUFACTURER_STOCK_STORAGE_KEY, CONFIRMED_MATCHES_STORAGE_KEY, MOCK_COMPANIES_STORAGE_KEY } from '../../constants';
 import { collection, getDocs, doc, writeBatch } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
-import { ai } from '../../lib/gemini'; 
+import { ai } from '../../lib/gemini';
 
 type ActiveTab = 'ai' | 'manual';
 
@@ -94,7 +92,7 @@ export const AdminMatchmakingPage: React.FC = () => {
             console.error(error);
             return t('adminMatchmaking_error_pairingGeneric');
         }
-    }, [ai, activeDemands, availableStock, locale, t]);
+    }, [activeDemands, availableStock, locale, t]);
     
     const rankStockForDemandWithGemini = useCallback(async (demand: DemandItem): Promise<RankedStock[] | string> => {
         if (!ai) return t('customerNewDemand_error_aiUnavailable');
@@ -126,7 +124,7 @@ export const AdminMatchmakingPage: React.FC = () => {
             console.error(error);
             return t('adminUsers_error_aiFeatureGeneric');
         }
-    }, [ai, availableStock, allStock, t]);
+    }, [availableStock, allStock, t]);
 
     const handleFetchSuggestions = useCallback(async () => {
         setIsSuggestionsLoading(true);

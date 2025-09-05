@@ -1,5 +1,5 @@
 // Firebase initialization helper (modular v9+)
-import { initializeApp, getApps } from 'firebase/app';
+import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
@@ -15,9 +15,11 @@ const firebaseConfig = {
   measurementId: "G-E86YM48DL3"
 };
 
-let app = undefined;
+let app;
 if (!getApps().length) {
-  app = initializeApp(firebaseConfig as any);
+  app = initializeApp(firebaseConfig);
+} else {
+  app = getApp();
 }
 
 export const auth = getAuth();

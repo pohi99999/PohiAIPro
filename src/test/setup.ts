@@ -1,9 +1,26 @@
 import '@testing-library/jest-dom'
 
 // Mock Firebase modules for testing
-vi.mock('firebase/app', () => ({
-  initializeApp: vi.fn(),
-}))
+vi.mock('firebase/app', () => {
+  const mockApps = [];
+  const mockApp = { name: 'mock-app' };
+
+  return {
+    initializeApp: vi.fn().mockImplementation(() => {
+      if (mockApps.length === 0) {
+        mockApps.push(mockApp);
+      }
+      return mockApp;
+    }),
+    getApps: vi.fn().mockImplementation(() => mockApps),
+    getApp: vi.fn().mockImplementation(() => {
+      if (mockApps.length > 0) {
+        return mockApps[0];
+      }
+      return undefined;
+    }),
+  };
+});
 
 vi.mock('firebase/firestore', () => ({
   getFirestore: vi.fn(),

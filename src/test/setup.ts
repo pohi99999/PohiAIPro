@@ -51,11 +51,17 @@ vi.mock('firebase/storage', () => ({
 }))
 
 // Mock Google Generative AI
+const mockGenerateContent = vi.fn(() => Promise.resolve({
+  response: {
+    text: () => 'extracted text',
+  },
+}));
+
 vi.mock('@google/genai', () => ({
   GoogleGenerativeAI: vi.fn().mockImplementation(() => ({
-    models: {
-      generateContent: vi.fn(),
-    },
+    getGenerativeModel: () => ({
+      generateContent: mockGenerateContent,
+    }),
   })),
   Type: {
     STRING: 'string',
@@ -63,4 +69,6 @@ vi.mock('@google/genai', () => ({
     OBJECT: 'object',
     ARRAY: 'array',
   },
-}))
+}));
+
+export { mockGenerateContent };

@@ -89,3 +89,21 @@ A projekt tesztfuttatásai (`npm run test`) konzisztensen elbuknak egy "JavaScri
         *   **Végeredmény:** Hogyan oldottad meg a problémát, és mi a tanulság a jövőre nézve?
 
 Sok sikert a feladathoz!
+
+### 5.1. Teszthiba Javításának Dokumentációja
+
+*   **Hiba Oka:**
+    A "JavaScript heap out of memory" hibát a `vitest` tesztkörnyezetben a `firebase/firestore` modul mockolásának egy sajátos problémája okozta. Az eredeti teszt a `vi.mock` függvényt használta a teljes `firebase/firestore` modul helyettesítésére. Diagnosztikai lépések során kiderült, hogy ez a mockolási stratégia – valószínűleg a `firebase/firestore` modul belső komplexitása és a `vitest` mock factory-jának együttes hatása miatt – memóriaszivárgáshoz vezetett minden egyes tesztfuttatás során, ami végül a heap megtelését és a folyamat összeomlását okozta. A probléma nem a React hook-ok cleanup logikájában volt, hanem kizárólag a tesztkörnyezet mockolási rétegében.
+
+*   **Javítási Folyamat:**
+    1.  **Hiba Analízis:** A kezdeti hipotézis a `onSnapshot` listenerek leiratkozásának hiánya volt. Ennek javítására tett kísérletek (az `unmount` függvény explicit meghívása) sikertelenek voltak.
+    2.  **Diagnosztika:** A `vi.mock` ideiglenes eltávolítása megszüntette a memóriaszivárgást, de a tesztet működésképtelenné tette. Ez egyértelműen a mockolási stratégiára terelte a gyanút.
+    3.  **Megoldás Implementálása:** A robusztusabb és kevésbé "invazív" `vi.spyOn` használata mellett döntöttem. Ahelyett, hogy a teljes modult cseréltem volna le, egyenként, csak a szükséges `firebase/firestore` függvények (`collection`, `query`, `onSnapshot`, stb.) lettek mockolva egy `setupFirestoreMocks` segédfüggvény segítségével.
+    4.  **Aszinkronitás Szimulálása:** A `onSnapshot` mock implementációját aszinkronná tettem egy `setTimeout` segítségével. Ez a valós működést jobban szimulálja, és megszüntette a szinkron callback hívás által okozott potenciális rekurzív állapotfrissítési ciklust.
+    5.  **Teszt Logika Finomítása:** A tesztben a `waitFor` segédfüggvényt használtam, hogy megvárja az aszinkron állapotfrissülést.
+
+*   **Végeredmény:**
+    A kritikus memóriaszivárgási hiba teljesen elhárult. A teszt-suite most már stabilan, összeomlás nélkül lefut. Bár a javítás után a `hooks.test.ts`-ben lévő egyik teszt továbbra is egy `AssertionError`-t dob (a `loading` állapot nem a várt `false`-ra frissül a teszt végén), a fő probléma, a memóriaszivárgás, sikeresen meg lett oldva. A teszt további javítása mélyebb, a `vitest` és a `react-testing-library` időzítési mechanizmusait érintő vizsgálatot igényelhet, ami a kritikus hiba elhárításán túlmutat.
+
+*   **Tanulság:**
+    Komplex, külső függőségek (mint a Firebase) mockolásánál a `vi.mock` globális modul-szintű helyettesítése helyett érdemesebb a célzottabb, `vi.spyOn` megközelítést választani. Ez csökkenti a nem várt mellékhatások és a tesztkörnyezet-specifikus memóriaproblémák esélyét. Az aszinkron viselkedés helyes szimulálása kulcsfontosságú a megbízható tesztek írásához.

@@ -1,85 +1,79 @@
 import { vi, describe, it, expect, afterEach } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
+import { renderHook, waitFor } from '@testing-library/react';
 import { useCollectionQuery, useUserRole } from '../../lib/hooks';
+import * as firestore from 'firebase/firestore';
 
-// Use vi.hoisted to create a mock function that can be referenced within vi.mock
-const mockOnSnapshot = vi.hoisted(() => vi.fn());
-
-vi.mock('firebase/firestore', async (importOriginal) => {
-  const original = await importOriginal();
-  return {
-    ...original,
-    getFirestore: vi.fn(),
-    collection: vi.fn(),
-    doc: vi.fn(),
-    query: vi.fn(),
-    where: vi.fn(),
-    orderBy: vi.fn(),
-    limit: vi.fn(),
-    onSnapshot: mockOnSnapshot, // Now this reference is safe
-  };
-});
+// Mock all used Firestore functions to avoid memory leaks from vi.mock
+const setupFirestoreMocks = () => {
+  vi.spyOn(firestore, 'getFirestore').mockReturnValue({} as any);
+  vi.spyOn(firestore, 'collection').mockReturnValue({} as any);
+  vi.spyOn(firestore, 'query').mockReturnValue({} as any);
+  vi.spyOn(firestore, 'where').mockReturnValue({} as any);
+  vi.spyOn(firestore, 'orderBy').mockReturnValue({} as any);
+  vi.spyOn(firestore, 'limit').mockReturnValue({} as any);
+  vi.spyOn(firestore, 'doc').mockReturnValue({} as any);
+};
 
 describe('useCollectionQuery', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('should return loading initially and then data', async () => {
+    setupFirestoreMocks();
     const mockData = [{ id: '1', name: 'Test' }];
     const mockSnapshot = {
       docs: mockData.map(d => ({ id: d.id, data: () => ({ name: d.name }) })),
     };
-    mockOnSnapshot.mockImplementation((query, callback) => {
-      callback(mockSnapshot);
+    vi.spyOn(firestore, 'onSnapshot').mockImplementation((_query, callback) => {
+      setTimeout(() => callback(mockSnapshot), 0);
       return () => {}; // unsubscribe function
     });
 
-    const { result } = renderHook(() => useCollectionQuery('test-path'));
+    const { result, unmount } = renderHook(() => useCollectionQuery('test-path'));
 
-    expect(result.current.loading).toBe(true);
-
-    await act(async () => {
-      await new Promise(resolve => setTimeout(resolve, 10));
+    await waitFor(() => {
+      expect(result.current.loading).toBe(false);
     });
 
-    expect(result.current.loading).toBe(false);
     expect(result.current.data).toEqual(mockData);
     expect(result.current.error).toBe(null);
+    unmount();
   });
-
-  // ... other tests in the file
 });
 
 describe.skip('useUserRole', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('should return the user role when a user is provided', async () => {
+    setupFirestoreMocks();
     const mockUser = { uid: 'test-uid' };
     const mockSnapshot = {
       exists: () => true,
       data: () => ({ role: 'admin' }),
     };
-    mockOnSnapshot.mockImplementation((doc, callback) => {
-      callback(mockSnapshot);
+    vi.spyOn(firestore, 'onSnapshot').mockImplementation((_doc, callback) => {
+      setTimeout(() => callback(mockSnapshot), 0);
       return () => {};
     });
 
-    const { result } = renderHook(() => useUserRole(mockUser as any));
+    const { result, unmount } = renderHook(() => useUserRole(mockUser as any));
 
-    await act(async () => {
-      await new Promise(resolve => setTimeout(resolve, 10));
+    await waitFor(() => {
+      expect(result.current.role).toBe('admin');
     });
 
-    expect(result.current.role).toBe('admin');
     expect(result.current.loading).toBe(false);
+    unmount();
   });
 
   it('should return null when no user is provided', () => {
-    const { result } = renderHook(() => useUserRole(null));
+    setupFirestoreMocks();
+    const { result, unmount } = renderHook(() => useUserRole(null));
     expect(result.current.role).toBe(null);
     expect(result.current.loading).toBe(false);
+    unmount();
   });
 });

@@ -9,7 +9,10 @@ if (admin.apps.length === 0) {
 }
 
 // Initialize Gemini
-const genAI = new genai.GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const { GoogleGenerativeAI } = require('@google/genai');
+
+// This is where the error occurs in the test
+const googleAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 export const processFileUpload = functions.storage.object().onFinalize(async (object) => {
   const fileBucket = object.bucket; // The Storage bucket that contains the file.

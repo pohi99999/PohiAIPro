@@ -71,4 +71,9 @@ vi.mock('@google/genai', () => ({
   },
 }));
 
+// Mock Firebase Analytics
+vi.mock('firebase/analytics', () => ({
+  getAnalytics: vi.fn(),
+}));
+
 export { mockGenerateContent };

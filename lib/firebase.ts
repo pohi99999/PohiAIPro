@@ -1,12 +1,4 @@
-// Firebase initialization helper (modular v9+)
 import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
-import { getStorage } from 'firebase/storage';
-
-// TODO: Move this configuration to environment variables for production
-// lib/firebase.ts
-import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { getStorage } from 'firebase/storage';
@@ -22,23 +14,12 @@ const firebaseConfig = {
   measurementId: "G-1JZ3MRB7EJ"
 };
 
-const app = initializeApp(firebaseConfig);
+// Initialize Firebase App only if it's not already initialized
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+
 const db = getFirestore(app);
 const auth = getAuth(app);
 const storage = getStorage(app);
 const analytics = getAnalytics(app);
 
-export { db, auth, storage, analytics };
-
-let app;
-if (!getApps().length) {
-  app = initializeApp(firebaseConfig);
-} else {
-  app = getApp();
-}
-
-export const auth = getAuth();
-export const db = getFirestore();
-export const storage = getStorage();
-
-export default app;
+export { db, auth, storage, analytics, app };

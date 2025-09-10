@@ -74,3 +74,37 @@
 ### **Összegzés és Következő Lépések**
 
 A rendszer sikeresen át lett állítva egy modern, Firebase-alapú backendre. A kódminőség és biztonság jelentősen javult. A következő nagy lépés a mesterséges intelligencia képességek mélyebb integrálása a 2. Fázisban leírtak szerint.
+
+---
+
+### **Helyzetértékelés a Tesztelési Fázis Után (2025-09-10)**
+
+A projekt új Firebase környezetbe való átültetése és a GitHubra való feltöltése után lefolytatott tesztelési fázis fontos eredményeket hozott:
+
+*   **Pozitívumok:** A tesztek nagy része (`business-logic`, `types`, `utils`) sikeresen lefutott. Ez azt jelenti, hogy a projekt alapvető üzleti logikája, adatstruktúrái és segédfüggvényei stabilak és a környezet megfelelően van konfigurálva.
+*   **Kritikus Hiba:** A `src/test/hooks.test.ts` tesztcsomag futtatása során a tesztkörnyezet konzisztensen összeomlik egy "JavaScript heap out of memory" hibával. Ez egy súlyos memóriakezelési problémára utal, amely valószínűleg a React hook-ok (különösen a `useCollectionQuery`) és a Firebase `onSnapshot` listenerének tesztkörnyezetben való interakciójából fakad.
+
+**Konklúzió:** Bár a projekt fő funkcionalitása működőképesnek tűnik, a tesztelési rendszer jelenlegi instabilitása magas kockázatot jelent. Megbízható, automatizált tesztek nélkül az új funkciók fejlesztése vagy a meglévők refaktorálása hibákhoz vezethet.
+
+---
+
+### **Javasolt Azonnali Következő Lépés: Kritikus Hibajavítás**
+
+**Prioritás #1: A tesztkörnyezet stabilizálása.**
+
+Mielőtt bármilyen új funkció fejlesztésébe kezdenénk, elengedhetetlen a tesztelési fázisban azonosított memóriaprobléma teljes körű javítása.
+
+**Javasolt Cselekvési Terv:**
+
+1.  **Fejlesztői Analízis:** Egy emberi fejlesztőnek kell átvizsgálnia a `src/test/hooks.test.ts` és a hozzá kapcsolódó `lib/hooks.ts` fájlokat.
+    *   **Eszközök:** Javasolt egy memória-profiler (pl. a Chrome DevTools beépített memóriaprofilozója vagy a `node --inspect` parancs) használata a memóriaszivárgás pontos helyének és okának azonosítására.
+    *   **Vizsgálandó területek:**
+        *   Az `onSnapshot` listenerek megfelelő leiratkozásának (cleanup) ellenőrzése a `useEffect` hook-okban.
+        *   A `renderHook` használatának felülvizsgálata, hogy nem okoz-e végtelen renderelési ciklust a mock-olt adatok miatt.
+        *   A mock-ok (`vi.mock`) komplexitásának csökkentése, ha lehetséges.
+
+2.  **Javítás Implementálása:** A hiba okának azonosítása után a fejlesztőnek implementálnia kell a javítást.
+
+3.  **Teljes Tesztfuttatás:** A javítás után a teljes tesztcsomagot (`npm run test`) le kell futtatni, hogy megbizonyosodjunk arról, hogy minden teszt sikeresen és memóriahiba nélkül lefut.
+
+**Amint a tesztkörnyezet stabil, a projekt visszatérhet a 2. Fázisban definiált MI képességek bővítéséhez.**

@@ -1,15 +1,17 @@
-const functions = require("firebase-functions");
-const admin = require("firebase-admin");
-const { GoogleAuth } = require("google-auth-library");
-const { GoogleGenerativeAI } = require("@google/genai");
+import functions from "firebase-functions";
+import admin from "firebase-admin";
+import { GoogleAuth } from "google-auth-library";
+import * as genai from "@google/genai";
 
-// Initialize Firebase Admin SDK
-admin.initializeApp();
+// Initialize Firebase Admin SDK if not already initialized
+if (admin.apps.length === 0) {
+    admin.initializeApp();
+}
 
 // Initialize Gemini
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const genAI = new genai.GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-exports.processFileUpload = functions.storage.object().onFinalize(async (object) => {
+export const processFileUpload = functions.storage.object().onFinalize(async (object) => {
   const fileBucket = object.bucket; // The Storage bucket that contains the file.
   const filePath = object.name; // File path in the bucket.
   const contentType = object.contentType; // File content type.

@@ -1,6 +1,12 @@
-// index.js
-const helloWorld = require('./helloWorld');
-const fileUpload = require('./onFileUpload');
+import { helloWorld } from './helloWorld.js';
+import { processFileUpload } from './onFileUpload.js';
+import { createAgentTask, getAgentTaskStatus } from './agentTask.js';
 
-exports.helloWorld = helloWorld.helloWorld;
-exports.processFileUpload = fileUpload.processFileUpload;
+// The geminiInitTest was for debugging and is no longer needed.
+// We now export the actual, fixed functions.
+export { 
+    helloWorld, 
+    processFileUpload, 
+    createAgentTask, 
+    getAgentTaskStatus 
+};

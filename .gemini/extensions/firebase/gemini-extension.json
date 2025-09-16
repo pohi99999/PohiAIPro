@@ -1,0 +1,17 @@
+{
+  "name": "firebase",
+  "version": "0.0.1",
+  "mcpServers": {
+    "firebase": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "firebase-tools",
+        "experimental:mcp",
+        "--dir",
+        "e:\Workflow\PohiAIPro"
+      ]
+    }
+  },
+  "contextFileName": "FIREBASE.md"
+}

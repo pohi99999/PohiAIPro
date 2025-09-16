@@ -29,7 +29,10 @@ mutation CreateProductReview(
       customerId_expr: "auth.uid"
       rating: $rating
       content: $content
-      contentEmbedding_embed: { model: "textembedding-gecko@003", text: $content }
+      contentEmbedding_embed: {
+        model: "textembedding-gecko@003"
+        text: $content
+      }
     }
   )
 }
@@ -72,7 +75,11 @@ mutation UpdateOrderByPaymentIntentId(
 ) @auth(level: USER) {
   query @redact {
     order(first: { where: { paymentIntentId: { eq: $paymentIntentId } } }) {
-      customerId @check(expr: "this == auth.uid", message: "You can only update the payment method of your own order.")
+      customerId
+        @check(
+          expr: "this == auth.uid"
+          message: "You can only update the payment method of your own order."
+        )
     }
   }
   order_update(
@@ -96,7 +103,11 @@ mutation UpdateOrderByChargeId(
 ) @auth(level: PUBLIC) {
   query @redact {
     order(first: { where: { chargeId: { eq: $chargeId } } }) {
-      customerId @check(expr: "this == auth.uid", message: "You can only update the charge of your own order.")
+      customerId
+        @check(
+          expr: "this == auth.uid"
+          message: "You can only update the charge of your own order."
+        )
     }
   }
   order_update(
@@ -110,11 +121,19 @@ mutation UpdateOrderByChargeId(
   )
 }
 
-mutation CreateOrderItem($orderId: UUID!, $productId: UUID!, $quantity: Int!, $price: Float!)
-@auth(level: USER) {
+mutation CreateOrderItem(
+  $orderId: UUID!
+  $productId: UUID!
+  $quantity: Int!
+  $price: Float!
+) @auth(level: USER) {
   query @redact {
     order(id: $orderId) {
-      customerId @check(expr: "this == auth.uid", message: "You can only add to your own order.")
+      customerId
+        @check(
+          expr: "this == auth.uid"
+          message: "You can only add to your own order."
+        )
     }
   }
   orderItem_insert(

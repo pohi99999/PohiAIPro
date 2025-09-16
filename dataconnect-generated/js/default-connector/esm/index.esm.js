@@ -6,6 +6,72 @@ export const connectorConfig = {
   location: 'us-central1'
 };
 
+export const upsertCustomerRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return mutationRef(dcInstance, 'UpsertCustomer', inputVars);
+}
+upsertCustomerRef.operationName = 'UpsertCustomer';
+
+export function upsertCustomer(dcOrVars, vars) {
+  return executeMutation(upsertCustomerRef(dcOrVars, vars));
+}
+
+export const createProductReviewRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return mutationRef(dcInstance, 'CreateProductReview', inputVars);
+}
+createProductReviewRef.operationName = 'CreateProductReview';
+
+export function createProductReview(dcOrVars, vars) {
+  return executeMutation(createProductReviewRef(dcOrVars, vars));
+}
+
+export const createOrderRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return mutationRef(dcInstance, 'CreateOrder', inputVars);
+}
+createOrderRef.operationName = 'CreateOrder';
+
+export function createOrder(dcOrVars, vars) {
+  return executeMutation(createOrderRef(dcOrVars, vars));
+}
+
+export const updateOrderByPaymentIntentIdRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return mutationRef(dcInstance, 'UpdateOrderByPaymentIntentId', inputVars);
+}
+updateOrderByPaymentIntentIdRef.operationName = 'UpdateOrderByPaymentIntentId';
+
+export function updateOrderByPaymentIntentId(dcOrVars, vars) {
+  return executeMutation(updateOrderByPaymentIntentIdRef(dcOrVars, vars));
+}
+
+export const updateOrderByChargeIdRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars);
+  dcInstance._useGeneratedSdk();
+  return mutationRef(dcInstance, 'UpdateOrderByChargeId', inputVars);
+}
+updateOrderByChargeIdRef.operationName = 'UpdateOrderByChargeId';
+
+export function updateOrderByChargeId(dcOrVars, vars) {
+  return executeMutation(updateOrderByChargeIdRef(dcOrVars, vars));
+}
+
+export const createOrderItemRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return mutationRef(dcInstance, 'CreateOrderItem', inputVars);
+}
+createOrderItemRef.operationName = 'CreateOrderItem';
+
+export function createOrderItem(dcOrVars, vars) {
+  return executeMutation(createOrderItemRef(dcOrVars, vars));
+}
+
 export const listCustomersRef = (dc) => {
   const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
   dcInstance._useGeneratedSdk();
@@ -114,71 +180,5 @@ getOrderByIdRef.operationName = 'GetOrderById';
 
 export function getOrderById(dcOrVars, vars) {
   return executeQuery(getOrderByIdRef(dcOrVars, vars));
-}
-
-export const upsertCustomerRef = (dcOrVars, vars) => {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'UpsertCustomer', inputVars);
-}
-upsertCustomerRef.operationName = 'UpsertCustomer';
-
-export function upsertCustomer(dcOrVars, vars) {
-  return executeMutation(upsertCustomerRef(dcOrVars, vars));
-}
-
-export const createProductReviewRef = (dcOrVars, vars) => {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'CreateProductReview', inputVars);
-}
-createProductReviewRef.operationName = 'CreateProductReview';
-
-export function createProductReview(dcOrVars, vars) {
-  return executeMutation(createProductReviewRef(dcOrVars, vars));
-}
-
-export const createOrderRef = (dcOrVars, vars) => {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'CreateOrder', inputVars);
-}
-createOrderRef.operationName = 'CreateOrder';
-
-export function createOrder(dcOrVars, vars) {
-  return executeMutation(createOrderRef(dcOrVars, vars));
-}
-
-export const updateOrderByPaymentIntentIdRef = (dcOrVars, vars) => {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'UpdateOrderByPaymentIntentId', inputVars);
-}
-updateOrderByPaymentIntentIdRef.operationName = 'UpdateOrderByPaymentIntentId';
-
-export function updateOrderByPaymentIntentId(dcOrVars, vars) {
-  return executeMutation(updateOrderByPaymentIntentIdRef(dcOrVars, vars));
-}
-
-export const updateOrderByChargeIdRef = (dcOrVars, vars) => {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars);
-  dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'UpdateOrderByChargeId', inputVars);
-}
-updateOrderByChargeIdRef.operationName = 'UpdateOrderByChargeId';
-
-export function updateOrderByChargeId(dcOrVars, vars) {
-  return executeMutation(updateOrderByChargeIdRef(dcOrVars, vars));
-}
-
-export const createOrderItemRef = (dcOrVars, vars) => {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'CreateOrderItem', inputVars);
-}
-createOrderItemRef.operationName = 'CreateOrderItem';
-
-export function createOrderItem(dcOrVars, vars) {
-  return executeMutation(createOrderItemRef(dcOrVars, vars));
 }
 

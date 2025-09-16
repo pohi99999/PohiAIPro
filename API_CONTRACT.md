@@ -47,6 +47,7 @@ A szerver (BAS) azonnal válaszol egy `task_id`-val.
   "task_id": "string"
 }
 ```
+
 - `task_id` (string): Egy egyedi azonosító, amellyel a feladat állapotára és eredményére lehet hivatkozni.
 
 ---
@@ -99,9 +100,24 @@ A kliens lekérdezi egy korábban létrehozott feladat állapotát és (ha elké
 ```json
 {
   "optimized_route": [
-    { "stop": 1, "location": "Budapest, HU", "deal_id": "deal-001", "action": "LOAD" },
-    { "stop": 2, "location": "Vienna, AT", "deal_id": "deal-002", "action": "LOAD" },
-    { "stop": 3, "location": "Munich, DE", "deal_id": "deal-003", "action": "UNLOAD_ALL" }
+    {
+      "stop": 1,
+      "location": "Budapest, HU",
+      "deal_id": "deal-001",
+      "action": "LOAD"
+    },
+    {
+      "stop": 2,
+      "location": "Vienna, AT",
+      "deal_id": "deal-002",
+      "action": "LOAD"
+    },
+    {
+      "stop": 3,
+      "location": "Munich, DE",
+      "deal_id": "deal-003",
+      "action": "UNLOAD_ALL"
+    }
   ],
   "cmr_document_data": {
     "sender": "Pohi Corp.",

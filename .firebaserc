@@ -1,5 +1,7 @@
 {
   "projects": {
     "default": "sys-70267508495646346072661892"
-  }
+  },
+  "targets": {},
+  "etags": {}
 }

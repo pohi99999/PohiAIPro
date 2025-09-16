@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
+import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import {
   collection,
   query,
@@ -10,10 +10,15 @@ import {
   doc,
   where,
   orderBy,
-} from 'firebase/firestore';
-import { db } from './firebase';
-import type { User } from 'firebase/auth';
-import type { Notification, Conversation, ChatMessage, MockCompany } from '../types';
+} from "firebase/firestore";
+import { db } from "./firebase";
+import type { User } from "firebase/auth";
+import type {
+  Notification,
+  Conversation,
+  ChatMessage,
+  MockCompany,
+} from "../types";
 
 // Simple in-memory cache for queries within the same runtime.
 const collectionCache = new Map<string, any[]>();
@@ -33,7 +38,7 @@ export interface UseCollectionQueryOptions {
 export function useCollectionQuery<T = DocumentData>(
   path: string,
   constraints: QueryConstraint[] = [],
-  options: UseCollectionQueryOptions = {}
+  options: UseCollectionQueryOptions = {},
 ) {
   const [data, setData] = useState<T[] | null>(null);
   const [loading, setLoading] = useState(true);
@@ -58,7 +63,7 @@ export function useCollectionQuery<T = DocumentData>(
       combinedConstraints.push(limitFn(options.pageSize));
     }
 
-    const cacheKey = `${path}|${JSON.stringify(combinedConstraints.map(c => c.toString()))}|pageSize:${options.pageSize}`;
+    const cacheKey = `${path}|${JSON.stringify(combinedConstraints.map((c) => c.toString()))}|pageSize:${options.pageSize}`;
 
     // If cache enabled and we have cached data, return it immediately.
     if (options.enableCache && collectionCache.has(cacheKey)) {
@@ -70,7 +75,11 @@ export function useCollectionQuery<T = DocumentData>(
     const subscribe = () => {
       // clear previous unsubscribe if any
       if (unsubRef.current) {
-        try { unsubRef.current(); } catch (e) { /* ignore */ }
+        try {
+          unsubRef.current();
+        } catch (e) {
+          /* ignore */
+        }
         unsubRef.current = null;
       }
 
@@ -82,7 +91,7 @@ export function useCollectionQuery<T = DocumentData>(
           const items = snap.docs.map((d) => {
             const data = d.data();
             // Convert Firestore Timestamps to ISO strings
-            if (data.timestamp && typeof data.timestamp.toDate === 'function') {
+            if (data.timestamp && typeof data.timestamp.toDate === "function") {
               data.timestamp = data.timestamp.toDate().toISOString();
             }
             return { id: d.id, ...data };
@@ -90,7 +99,8 @@ export function useCollectionQuery<T = DocumentData>(
           setData(items);
           setLoading(false);
           retryRef.current = 0;
-          if (options.enableCache) collectionCache.set(cacheKey, items as any[]);
+          if (options.enableCache)
+            collectionCache.set(cacheKey, items as any[]);
         },
         (err) => {
           if (!mounted) return;
@@ -101,13 +111,14 @@ export function useCollectionQuery<T = DocumentData>(
           if (retryRef.current < maxRetries) {
             const attempt = retryRef.current + 1;
             retryRef.current = attempt;
-            const delay = (options.retry?.initialDelayMs ?? 300) * Math.pow(2, attempt - 1);
+            const delay =
+              (options.retry?.initialDelayMs ?? 300) * Math.pow(2, attempt - 1);
             setTimeout(() => {
               if (!mounted) return;
               subscribe();
             }, delay);
           }
-        }
+        },
       );
       unsubRef.current = unsub;
     };
@@ -117,7 +128,11 @@ export function useCollectionQuery<T = DocumentData>(
     return () => {
       mounted = false;
       if (unsubRef.current) {
-        try { unsubRef.current(); } catch (e) { /* ignore */ }
+        try {
+          unsubRef.current();
+        } catch (e) {
+          /* ignore */
+        }
         unsubRef.current = null;
       }
     };
@@ -138,7 +153,7 @@ export function useUserRole(user: User | null) {
       return;
     }
 
-    const docRef = doc(db, 'users', user.uid);
+    const docRef = doc(db, "users", user.uid);
     const unsub = onSnapshot(
       docRef,
       (snap) => {
@@ -150,7 +165,7 @@ export function useUserRole(user: User | null) {
         }
         setLoading(false);
       },
-      () => setLoading(false)
+      () => setLoading(false),
     );
 
     return () => unsub();
@@ -160,31 +175,52 @@ export function useUserRole(user: User | null) {
 }
 
 export function useNotifications(userId: string | null) {
-  const constraints = useMemo(() => (userId ? [where('userId', '==', userId), orderBy('timestamp', 'desc')] : []), [userId]);
+  const constraints = useMemo(
+    () =>
+      userId
+        ? [where("userId", "==", userId), orderBy("timestamp", "desc")]
+        : [],
+    [userId],
+  );
   const options = useMemo(() => ({ pageSize: 20 }), []);
 
-  const { data: notifications, loading, error } = useCollectionQuery<Notification>('notifications', constraints, options);
+  const {
+    data: notifications,
+    loading,
+    error,
+  } = useCollectionQuery<Notification>("notifications", constraints, options);
 
-  const unreadCount = notifications?.filter(n => !n.isRead).length || 0;
+  const unreadCount = notifications?.filter((n) => !n.isRead).length || 0;
 
   return { notifications, unreadCount, loading, error };
 }
 
 export function useConversations(userId: string | null) {
-  const constraints = useMemo(() => (userId ? [where('participantIds', 'array-contains', userId)] : []), [userId]);
+  const constraints = useMemo(
+    () => (userId ? [where("participantIds", "array-contains", userId)] : []),
+    [userId],
+  );
   const options = useMemo(() => ({ pageSize: 50 }), []);
 
-  const { data: conversations, loading, error } = useCollectionQuery<Conversation>('conversations', constraints, options);
+  const {
+    data: conversations,
+    loading,
+    error,
+  } = useCollectionQuery<Conversation>("conversations", constraints, options);
 
   return { conversations, loading, error };
 }
 
 export function useMessages(conversationId: string | null) {
-  const path = conversationId ? `conversations/${conversationId}/messages` : '';
-  const constraints = useMemo(() => [orderBy('timestamp', 'asc')], []);
+  const path = conversationId ? `conversations/${conversationId}/messages` : "";
+  const constraints = useMemo(() => [orderBy("timestamp", "asc")], []);
   const options = useMemo(() => ({ pageSize: 100 }), []);
 
-  const { data: messages, loading, error } = useCollectionQuery<ChatMessage>(path, constraints, options);
+  const {
+    data: messages,
+    loading,
+    error,
+  } = useCollectionQuery<ChatMessage>(path, constraints, options);
 
   return { messages, loading, error };
 }
@@ -192,7 +228,11 @@ export function useMessages(conversationId: string | null) {
 export function useUsers() {
   const constraints = useMemo(() => [], []);
   const options = useMemo(() => ({ pageSize: 100 }), []);
-  const { data: users, loading, error } = useCollectionQuery<MockCompany>('users', constraints, options);
+  const {
+    data: users,
+    loading,
+    error,
+  } = useCollectionQuery<MockCompany>("users", constraints, options);
 
   return { users, loading, error };
 }
@@ -200,7 +240,7 @@ export function useUsers() {
 export function useGooglePicker({
   developerKey,
   clientId,
-  scope = ['https://www.googleapis.com/auth/drive.readonly'],
+  scope = ["https://www.googleapis.com/auth/drive.readonly"],
   onPicked,
 }: {
   developerKey: string;
@@ -214,12 +254,12 @@ export function useGooglePicker({
   // Load the Google Picker API script
   useEffect(() => {
     const loadGis = () => {
-      const script = document.createElement('script');
-      script.src = 'https://apis.google.com/js/api.js';
+      const script = document.createElement("script");
+      script.src = "https://apis.google.com/js/api.js";
       script.async = true;
       script.defer = true;
       script.onload = () => {
-        window.gapi.load('picker:client', () => {
+        window.gapi.load("picker:client", () => {
           setLoaded(true);
         });
       };
@@ -231,7 +271,9 @@ export function useGooglePicker({
 
   const createPicker = useCallback(() => {
     if (loaded && oauthToken) {
-      const view = new window.google.picker.View(window.google.picker.ViewId.DOCS);
+      const view = new window.google.picker.View(
+        window.google.picker.ViewId.DOCS,
+      );
       const picker = new window.google.picker.PickerBuilder()
         .enableFeature(window.google.picker.Feature.NAV_HIDDEN)
         .setAppId(clientId)
@@ -247,7 +289,7 @@ export function useGooglePicker({
   const handleAuthClick = () => {
     const tokenClient = window.google.accounts.oauth2.initTokenClient({
       client_id: clientId,
-      scope: scope.join(' '),
+      scope: scope.join(" "),
       callback: (tokenResponse) => {
         setOauthToken(tokenResponse.access_token);
       },

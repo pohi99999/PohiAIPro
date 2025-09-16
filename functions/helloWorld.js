@@ -1,6 +1,5 @@
-import functions from 'firebase-functions';
+import functions from "firebase-functions";
 
 export const helloWorld = functions.https.onRequest((req, res) => {
-  res.send('Hello from Pohi Functions!');
+  res.send("Hello from Pohi Functions!");
 });
-

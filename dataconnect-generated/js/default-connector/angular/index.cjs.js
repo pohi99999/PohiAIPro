@@ -1,7 +1,31 @@
-const { listCustomersRef, getReviewsByHandleRef, getProductByHandleRef, getCollectionByHandleRef, getCollectionsByPageRef, searchProductDescriptionUsingL2similarityRef, searchProductTitleUsingL2similarityRef, searchProductReviewContentUsingL2similarityRef, getOrdersByCustomerIdRef, getOrderByIdRef, upsertCustomerRef, createProductReviewRef, createOrderRef, updateOrderByPaymentIntentIdRef, updateOrderByChargeIdRef, createOrderItemRef } = require('../');
+const { upsertCustomerRef, createProductReviewRef, createOrderRef, updateOrderByPaymentIntentIdRef, updateOrderByChargeIdRef, createOrderItemRef, listCustomersRef, getReviewsByHandleRef, getProductByHandleRef, getCollectionByHandleRef, getCollectionsByPageRef, searchProductDescriptionUsingL2similarityRef, searchProductTitleUsingL2similarityRef, searchProductReviewContentUsingL2similarityRef, getOrdersByCustomerIdRef, getOrderByIdRef } = require('../');
 const { DataConnect, CallerSdkTypeEnum } = require('@angular/fire/data-connect');
 const { injectDataConnectQuery, injectDataConnectMutation } = require('@tanstack-query-firebase/angular/data-connect');
 const { inject, EnvironmentInjector } = require('@angular/core');
+
+exports.injectUpsertCustomer = function injectUpsertCustomer(args, injector) {
+  return injectDataConnectMutation(upsertCustomerRef, args, injector, CallerSdkTypeEnum.GeneratedAngular);
+}
+
+exports.injectCreateProductReview = function injectCreateProductReview(args, injector) {
+  return injectDataConnectMutation(createProductReviewRef, args, injector, CallerSdkTypeEnum.GeneratedAngular);
+}
+
+exports.injectCreateOrder = function injectCreateOrder(args, injector) {
+  return injectDataConnectMutation(createOrderRef, args, injector, CallerSdkTypeEnum.GeneratedAngular);
+}
+
+exports.injectUpdateOrderByPaymentIntentId = function injectUpdateOrderByPaymentIntentId(args, injector) {
+  return injectDataConnectMutation(updateOrderByPaymentIntentIdRef, args, injector, CallerSdkTypeEnum.GeneratedAngular);
+}
+
+exports.injectUpdateOrderByChargeId = function injectUpdateOrderByChargeId(args, injector) {
+  return injectDataConnectMutation(updateOrderByChargeIdRef, args, injector, CallerSdkTypeEnum.GeneratedAngular);
+}
+
+exports.injectCreateOrderItem = function injectCreateOrderItem(args, injector) {
+  return injectDataConnectMutation(createOrderItemRef, args, injector, CallerSdkTypeEnum.GeneratedAngular);
+}
 
 exports.injectListCustomers = function injectListCustomers(options, injector) {
   const finalInjector = injector || inject(EnvironmentInjector);
@@ -130,29 +154,5 @@ exports.injectGetOrderById = function injectGetOrderById(args, options, injector
       ...addOpn
     };
   }, finalInjector, CallerSdkTypeEnum.GeneratedAngular);
-}
-
-exports.injectUpsertCustomer = function injectUpsertCustomer(args, injector) {
-  return injectDataConnectMutation(upsertCustomerRef, args, injector, CallerSdkTypeEnum.GeneratedAngular);
-}
-
-exports.injectCreateProductReview = function injectCreateProductReview(args, injector) {
-  return injectDataConnectMutation(createProductReviewRef, args, injector, CallerSdkTypeEnum.GeneratedAngular);
-}
-
-exports.injectCreateOrder = function injectCreateOrder(args, injector) {
-  return injectDataConnectMutation(createOrderRef, args, injector, CallerSdkTypeEnum.GeneratedAngular);
-}
-
-exports.injectUpdateOrderByPaymentIntentId = function injectUpdateOrderByPaymentIntentId(args, injector) {
-  return injectDataConnectMutation(updateOrderByPaymentIntentIdRef, args, injector, CallerSdkTypeEnum.GeneratedAngular);
-}
-
-exports.injectUpdateOrderByChargeId = function injectUpdateOrderByChargeId(args, injector) {
-  return injectDataConnectMutation(updateOrderByChargeIdRef, args, injector, CallerSdkTypeEnum.GeneratedAngular);
-}
-
-exports.injectCreateOrderItem = function injectCreateOrderItem(args, injector) {
-  return injectDataConnectMutation(createOrderItemRef, args, injector, CallerSdkTypeEnum.GeneratedAngular);
 }
 

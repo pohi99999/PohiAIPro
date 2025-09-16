@@ -1,9 +1,27 @@
-import { ListCustomersData, GetReviewsByHandleData, GetReviewsByHandleVariables, GetProductByHandleData, GetProductByHandleVariables, GetCollectionByHandleData, GetCollectionByHandleVariables, GetCollectionsByPageData, GetCollectionsByPageVariables, SearchProductDescriptionUsingL2similarityData, SearchProductDescriptionUsingL2similarityVariables, SearchProductTitleUsingL2similarityData, SearchProductTitleUsingL2similarityVariables, SearchProductReviewContentUsingL2similarityData, SearchProductReviewContentUsingL2similarityVariables, GetOrdersByCustomerIdData, GetOrdersByCustomerIdVariables, GetOrderByIdData, GetOrderByIdVariables, UpsertCustomerData, UpsertCustomerVariables, CreateProductReviewData, CreateProductReviewVariables, CreateOrderData, CreateOrderVariables, UpdateOrderByPaymentIntentIdData, UpdateOrderByPaymentIntentIdVariables, UpdateOrderByChargeIdData, UpdateOrderByChargeIdVariables, CreateOrderItemData, CreateOrderItemVariables } from '../';
+import { UpsertCustomerData, UpsertCustomerVariables, CreateProductReviewData, CreateProductReviewVariables, CreateOrderData, CreateOrderVariables, UpdateOrderByPaymentIntentIdData, UpdateOrderByPaymentIntentIdVariables, UpdateOrderByChargeIdData, UpdateOrderByChargeIdVariables, CreateOrderItemData, CreateOrderItemVariables, ListCustomersData, GetReviewsByHandleData, GetReviewsByHandleVariables, GetProductByHandleData, GetProductByHandleVariables, GetCollectionByHandleData, GetCollectionByHandleVariables, GetCollectionsByPageData, GetCollectionsByPageVariables, SearchProductDescriptionUsingL2similarityData, SearchProductDescriptionUsingL2similarityVariables, SearchProductTitleUsingL2similarityData, SearchProductTitleUsingL2similarityVariables, SearchProductReviewContentUsingL2similarityData, SearchProductReviewContentUsingL2similarityVariables, GetOrdersByCustomerIdData, GetOrdersByCustomerIdVariables, GetOrderByIdData, GetOrderByIdVariables } from '../';
 import { ConnectorConfig, DataConnect, QueryRef, QueryPromise, MutationRef, MutationPromise} from '@angular/fire/data-connect';
 import { CreateQueryResult, CreateMutationResult} from '@tanstack/angular-query-experimental';
 import { CreateDataConnectQueryResult, CreateDataConnectQueryOptions, CreateDataConnectMutationResult, DataConnectMutationOptionsUndefinedMutationFn } from '@tanstack-query-firebase/angular/data-connect';
 import { FirebaseError } from 'firebase/app';
 import { Injector } from '@angular/core';
+
+type UpsertCustomerOptions = DataConnectMutationOptionsUndefinedMutationFn<UpsertCustomerData, FirebaseError, UpsertCustomerVariables>;
+export function injectUpsertCustomer(options?: UpsertCustomerOptions, injector?: Injector): CreateDataConnectMutationResult<UpsertCustomerData, UpsertCustomerVariables, UpsertCustomerVariables>;
+
+type CreateProductReviewOptions = DataConnectMutationOptionsUndefinedMutationFn<CreateProductReviewData, FirebaseError, CreateProductReviewVariables>;
+export function injectCreateProductReview(options?: CreateProductReviewOptions, injector?: Injector): CreateDataConnectMutationResult<CreateProductReviewData, CreateProductReviewVariables, CreateProductReviewVariables>;
+
+type CreateOrderOptions = DataConnectMutationOptionsUndefinedMutationFn<CreateOrderData, FirebaseError, CreateOrderVariables>;
+export function injectCreateOrder(options?: CreateOrderOptions, injector?: Injector): CreateDataConnectMutationResult<CreateOrderData, CreateOrderVariables, CreateOrderVariables>;
+
+type UpdateOrderByPaymentIntentIdOptions = DataConnectMutationOptionsUndefinedMutationFn<UpdateOrderByPaymentIntentIdData, FirebaseError, UpdateOrderByPaymentIntentIdVariables>;
+export function injectUpdateOrderByPaymentIntentId(options?: UpdateOrderByPaymentIntentIdOptions, injector?: Injector): CreateDataConnectMutationResult<UpdateOrderByPaymentIntentIdData, UpdateOrderByPaymentIntentIdVariables, UpdateOrderByPaymentIntentIdVariables>;
+
+type UpdateOrderByChargeIdOptions = DataConnectMutationOptionsUndefinedMutationFn<UpdateOrderByChargeIdData, FirebaseError, UpdateOrderByChargeIdVariables | void>;
+export function injectUpdateOrderByChargeId(options?: UpdateOrderByChargeIdOptions, injector?: Injector): CreateDataConnectMutationResult<UpdateOrderByChargeIdData, UpdateOrderByChargeIdVariables, UpdateOrderByChargeIdVariables | void>;
+
+type CreateOrderItemOptions = DataConnectMutationOptionsUndefinedMutationFn<CreateOrderItemData, FirebaseError, CreateOrderItemVariables>;
+export function injectCreateOrderItem(options?: CreateOrderItemOptions, injector?: Injector): CreateDataConnectMutationResult<CreateOrderItemData, CreateOrderItemVariables, CreateOrderItemVariables>;
 
 export type ListCustomersOptions = () => Omit<CreateDataConnectQueryOptions<ListCustomersData, undefined>, 'queryFn'>;
 export function injectListCustomers(options?: ListCustomersOptions, injector?: Injector): CreateDataConnectQueryResult<ListCustomersData, undefined>;
@@ -43,21 +61,3 @@ export function injectGetOrdersByCustomerId(args: GetOrdersByCustomerIdArgs, opt
 type GetOrderByIdArgs = GetOrderByIdVariables | (() => GetOrderByIdVariables);
 export type GetOrderByIdOptions = () => Omit<CreateDataConnectQueryOptions<GetOrderByIdData, GetOrderByIdVariables>, 'queryFn'>;
 export function injectGetOrderById(args: GetOrderByIdArgs, options?: GetOrderByIdOptions, injector?: Injector): CreateDataConnectQueryResult<GetOrderByIdData, GetOrderByIdVariables>;
-
-type UpsertCustomerOptions = DataConnectMutationOptionsUndefinedMutationFn<UpsertCustomerData, FirebaseError, UpsertCustomerVariables>;
-export function injectUpsertCustomer(options?: UpsertCustomerOptions, injector?: Injector): CreateDataConnectMutationResult<UpsertCustomerData, UpsertCustomerVariables, UpsertCustomerVariables>;
-
-type CreateProductReviewOptions = DataConnectMutationOptionsUndefinedMutationFn<CreateProductReviewData, FirebaseError, CreateProductReviewVariables>;
-export function injectCreateProductReview(options?: CreateProductReviewOptions, injector?: Injector): CreateDataConnectMutationResult<CreateProductReviewData, CreateProductReviewVariables, CreateProductReviewVariables>;
-
-type CreateOrderOptions = DataConnectMutationOptionsUndefinedMutationFn<CreateOrderData, FirebaseError, CreateOrderVariables>;
-export function injectCreateOrder(options?: CreateOrderOptions, injector?: Injector): CreateDataConnectMutationResult<CreateOrderData, CreateOrderVariables, CreateOrderVariables>;
-
-type UpdateOrderByPaymentIntentIdOptions = DataConnectMutationOptionsUndefinedMutationFn<UpdateOrderByPaymentIntentIdData, FirebaseError, UpdateOrderByPaymentIntentIdVariables>;
-export function injectUpdateOrderByPaymentIntentId(options?: UpdateOrderByPaymentIntentIdOptions, injector?: Injector): CreateDataConnectMutationResult<UpdateOrderByPaymentIntentIdData, UpdateOrderByPaymentIntentIdVariables, UpdateOrderByPaymentIntentIdVariables>;
-
-type UpdateOrderByChargeIdOptions = DataConnectMutationOptionsUndefinedMutationFn<UpdateOrderByChargeIdData, FirebaseError, UpdateOrderByChargeIdVariables | void>;
-export function injectUpdateOrderByChargeId(options?: UpdateOrderByChargeIdOptions, injector?: Injector): CreateDataConnectMutationResult<UpdateOrderByChargeIdData, UpdateOrderByChargeIdVariables, UpdateOrderByChargeIdVariables | void>;
-
-type CreateOrderItemOptions = DataConnectMutationOptionsUndefinedMutationFn<CreateOrderItemData, FirebaseError, CreateOrderItemVariables>;
-export function injectCreateOrderItem(options?: CreateOrderItemOptions, injector?: Injector): CreateDataConnectMutationResult<CreateOrderItemData, CreateOrderItemVariables, CreateOrderItemVariables>;

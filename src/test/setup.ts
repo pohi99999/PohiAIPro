@@ -1,9 +1,9 @@
-import '@testing-library/jest-dom'
+import "@testing-library/jest-dom";
 
 // Mock Firebase modules for testing
-vi.mock('firebase/app', () => {
+vi.mock("firebase/app", () => {
   const mockApps = [];
-  const mockApp = { name: 'mock-app' };
+  const mockApp = { name: "mock-app" };
 
   return {
     initializeApp: vi.fn().mockImplementation(() => {
@@ -22,7 +22,7 @@ vi.mock('firebase/app', () => {
   };
 });
 
-vi.mock('firebase/firestore', () => ({
+vi.mock("firebase/firestore", () => ({
   getFirestore: vi.fn(),
   collection: vi.fn(),
   doc: vi.fn(),
@@ -33,46 +33,48 @@ vi.mock('firebase/firestore', () => ({
   orderBy: vi.fn(),
   limit: vi.fn(),
   writeBatch: vi.fn(),
-}))
+}));
 
-vi.mock('firebase/auth', () => ({
+vi.mock("firebase/auth", () => ({
   getAuth: vi.fn(),
   signInWithEmailAndPassword: vi.fn(),
   createUserWithEmailAndPassword: vi.fn(),
   signOut: vi.fn(),
   onAuthStateChanged: vi.fn(),
-}))
+}));
 
-vi.mock('firebase/storage', () => ({
+vi.mock("firebase/storage", () => ({
   getStorage: vi.fn(),
   ref: vi.fn(),
   uploadBytes: vi.fn(),
   getDownloadURL: vi.fn(),
-}))
-
-// Mock Google Generative AI
-const mockGenerateContent = vi.fn(() => Promise.resolve({
-  response: {
-    text: () => 'extracted text',
-  },
 }));
 
-vi.mock('@google/genai', () => ({
+// Mock Google Generative AI
+const mockGenerateContent = vi.fn(() =>
+  Promise.resolve({
+    response: {
+      text: () => "extracted text",
+    },
+  }),
+);
+
+vi.mock("@google/genai", () => ({
   GoogleGenerativeAI: vi.fn().mockImplementation(() => ({
     getGenerativeModel: () => ({
       generateContent: mockGenerateContent,
     }),
   })),
   Type: {
-    STRING: 'string',
-    NUMBER: 'number',
-    OBJECT: 'object',
-    ARRAY: 'array',
+    STRING: "string",
+    NUMBER: "number",
+    OBJECT: "object",
+    ARRAY: "array",
   },
 }));
 
 // Mock Firebase Analytics
-vi.mock('firebase/analytics', () => ({
+vi.mock("firebase/analytics", () => ({
   getAnalytics: vi.fn(),
 }));
 

@@ -18,7 +18,8 @@ type ProductVariant @table {
   product: Product!
   title: String! @col(name: "title", dataType: "varchar(100)")
   price: Float! @col(name: "price", dataType: "decimal(10,2)")
-  availableForSale: Boolean! @col(name: "available_for_sale", dataType: "boolean")
+  availableForSale: Boolean!
+    @col(name: "available_for_sale", dataType: "boolean")
   sku: String @col(name: "sku", dataType: "varchar(50)")
   inventoryQuantity: Int! @col(name: "inventory_quantity", dataType: "int")
   # The selected options will be available as a reverse relation
@@ -44,7 +45,8 @@ type Product @table {
   titleEmbedding: Vector! @col(size: 768)
   description: String @col(name: "description", dataType: "text")
   descriptionEmbedding: Vector! @col(size: 768)
-  availableForSale: Boolean! @col(name: "available_for_sale", dataType: "boolean")
+  availableForSale: Boolean!
+    @col(name: "available_for_sale", dataType: "boolean")
   productType: String @col(name: "product_type", dataType: "varchar(100)")
   featuredImage: ProductImage
   seo: SEO
@@ -58,7 +60,8 @@ type Customer @table {
   lastName: String! @col(name: "last_name", dataType: "varchar(50)")
   email: String! @col(name: "email", dataType: "varchar(50)")
   phone: String! @col(name: "phone", dataType: "varchar(50)")
-  acceptsMarketing: Boolean! @col(name: "accepts_marketing", dataType: "boolean")
+  acceptsMarketing: Boolean!
+    @col(name: "accepts_marketing", dataType: "boolean")
 }
 
 type OrderItem @table {
@@ -73,17 +76,21 @@ type Order @table {
   id: UUID! @default(expr: "uuidV4()")
   customer: Customer!
   chargeId: String @col(name: "charge_id", dataType: "varchar(100)")
-  paymentIntentId: String @col(name: "payment_intent_id", dataType: "varchar(100)")
+  paymentIntentId: String
+    @col(name: "payment_intent_id", dataType: "varchar(100)")
   receiptUrl: String @col(name: "receipt_url", dataType: "varchar(255)")
   subtotalPrice: Float! @col(name: "subtotal_price", dataType: "float")
   totalTax: Float! @col(name: "total_tax", dataType: "float")
-  totalShippingPrice: Float! @col(name: "total_shipping_price", dataType: "float")
+  totalShippingPrice: Float!
+    @col(name: "total_shipping_price", dataType: "float")
   totalPrice: Float! @col(name: "total_price", dataType: "float")
   processedAt: Date!
     @col(name: "processed_at", dataType: "timestamp")
     @default(expr: "request.time")
-  financialStatus: String! @col(name: "financial_status", dataType: "varchar(50)")
-  fulfillmentStatus: String! @col(name: "fulfillment_status", dataType: "varchar(50)")
+  financialStatus: String!
+    @col(name: "financial_status", dataType: "varchar(50)")
+  fulfillmentStatus: String!
+    @col(name: "fulfillment_status", dataType: "varchar(50)")
 }
 
 type SEO @table {
@@ -93,7 +100,8 @@ type SEO @table {
   keywords: String!
 }
 
-type ProductReview @table(name: "product_reviews", key: ["product", "customer"]) {
+type ProductReview
+  @table(name: "product_reviews", key: ["product", "customer"]) {
   id: UUID! @default(expr: "uuidV4()")
   product: Product!
   customer: Customer!
@@ -116,7 +124,8 @@ type Collection @table {
 }
 
 # Junction table for Collection-Product many-to-many relationship
-type ProductCollection @table(name: "product_collection_products", key: ["collection", "product"]) {
+type ProductCollection
+  @table(name: "product_collection_products", key: ["collection", "product"]) {
   collection: Collection!
   product: Product!
   displayPosition: Int! @col(name: "display_position", dataType: "int")

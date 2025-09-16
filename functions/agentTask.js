@@ -1,4 +1,3 @@
-
 import functions from "firebase-functions";
 import admin from "firebase-admin";
 import { v4 as uuidv4 } from "uuid";
@@ -27,7 +26,7 @@ export const createAgentTask = functions.https.onRequest(async (req, res) => {
     }
 
     const taskId = `${task_type.toLowerCase()}-task-${uuidv4()}`;
-    
+
     const taskData = {
       taskId,
       task_type,
@@ -42,7 +41,6 @@ export const createAgentTask = functions.https.onRequest(async (req, res) => {
     await db.collection("agent_tasks").doc(taskId).set(taskData);
 
     return res.status(202).json({ task_id: taskId });
-
   } catch (error) {
     console.error("Error creating agent task:", error);
     return res.status(500).send("Internal Server Error");
@@ -53,30 +51,33 @@ export const createAgentTask = functions.https.onRequest(async (req, res) => {
  * Gets the status of an agent task.
  * This function is triggered by an HTTP GET request.
  */
-export const getAgentTaskStatus = functions.https.onRequest(async (req, res) => {
+export const getAgentTaskStatus = functions.https.onRequest(
+  async (req, res) => {
     if (req.method !== "GET") {
-        return res.status(405).send("Method Not Allowed");
+      return res.status(405).send("Method Not Allowed");
     }
 
     try {
-        // The task_id is expected to be the last part of the path
-        const pathParts = req.path.split('/');
-        const taskId = pathParts.pop() || '';
+      // The task_id is expected to be the last part of the path
+      const pathParts = req.path.split("/");
+      const taskId = pathParts.pop() || "";
 
-        if (!taskId) {
-            return res.status(400).send("Bad Request: Missing task_id in URL.");
-        }
+      if (!taskId) {
+        return res.status(400).send("Bad Request: Missing task_id in URL.");
+      }
 
-        const taskDoc = await db.collection("agent_tasks").doc(taskId).get();
+      const taskDoc = await db.collection("agent_tasks").doc(taskId).get();
 
-        if (!taskDoc.exists) {
-            return res.status(404).send("Not Found: No task found with the given ID.");
-        }
+      if (!taskDoc.exists) {
+        return res
+          .status(404)
+          .send("Not Found: No task found with the given ID.");
+      }
 
-        return res.status(200).json(taskDoc.data());
-
+      return res.status(200).json(taskDoc.data());
     } catch (error) {
-        console.error("Error getting agent task status:", error);
-        return res.status(500).send("Internal Server Error");
+      console.error("Error getting agent task status:", error);
+      return res.status(500).send("Internal Server Error");
     }
-});
+  },
+);

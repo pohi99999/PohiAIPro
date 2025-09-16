@@ -1,7 +1,7 @@
-import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
-import { getStorage } from 'firebase/storage';
+import { initializeApp, getApps, getApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import { getStorage } from "firebase/storage";
 import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
@@ -11,7 +11,7 @@ const firebaseConfig = {
   storageBucket: "sys-70267508495646346072661892.firebasestorage.app",
   messagingSenderId: "665687504996",
   appId: "1:665687504996:web:dad2f404450010b22d8771",
-  measurementId: "G-1JZ3MRB7EJ"
+  measurementId: "G-1JZ3MRB7EJ",
 };
 
 // Initialize Firebase App only if it's not already initialized

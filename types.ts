@@ -1,12 +1,12 @@
 // types.ts
 // TranslationKey is defined in locales.ts and should be imported from there directly.
-import type { TranslationKey } from './locales';
-import type { ReactNode } from 'react';
+import type { TranslationKey } from "./locales";
+import type { ReactNode } from "react";
 
 export enum UserRole {
-  ADMIN = 'Administrator',
-  CUSTOMER = 'Customer', // Updated from BUYER
-  MANUFACTURER = 'Manufacturer',
+  ADMIN = "Administrator",
+  CUSTOMER = "Customer", // Updated from BUYER
+  MANUFACTURER = "Manufacturer",
 }
 
 export interface MenuItem {
@@ -31,10 +31,10 @@ export interface ProductFeatures {
 }
 
 export enum DemandStatus {
-  RECEIVED = 'Received',
-  PROCESSING = 'Processing',
-  COMPLETED = 'Completed',
-  CANCELLED = 'Cancelled',
+  RECEIVED = "Received",
+  PROCESSING = "Processing",
+  COMPLETED = "Completed",
+  CANCELLED = "Cancelled",
 }
 
 export interface DemandItem extends ProductFeatures {
@@ -47,9 +47,9 @@ export interface DemandItem extends ProductFeatures {
 }
 
 export enum StockStatus {
-  AVAILABLE = 'Available',
-  RESERVED = 'Reserved',
-  SOLD = 'Sold',
+  AVAILABLE = "Available",
+  RESERVED = "Reserved",
+  SOLD = "Sold",
 }
 
 export interface StockItem extends ProductFeatures {
@@ -94,17 +94,16 @@ export interface ComparisonData {
 }
 
 export interface GeminiComparisonItemDetails {
-    name: string;
-    dimensions_quantity_notes?: string;
-    pros?: string[];
-    cons?: string[];
+  name: string;
+  dimensions_quantity_notes?: string;
+  pros?: string[];
+  cons?: string[];
 }
 
 export interface GeminiComparisonResponse {
   original: GeminiComparisonItemDetails;
   alternative: GeminiComparisonItemDetails;
 }
-
 
 export interface MarketNewsItem {
   id: string;
@@ -124,7 +123,7 @@ export interface DemandForecast {
   productType: string;
   forecastValue: number;
   forecastUnit: string;
-  forecastDirection: 'increase' | 'decrease' | 'stagnation';
+  forecastDirection: "increase" | "decrease" | "stagnation";
   timePeriod: string;
   reason?: string;
 }
@@ -137,7 +136,6 @@ export interface FeedbackAnalysisData {
   keyThemes?: string[];
   improvementSuggestions?: string[];
 }
-
 
 export interface OptimizationTip {
   id: string;
@@ -161,43 +159,42 @@ export interface AiStockSuggestion {
 }
 
 export interface DisputeResolutionSuggestion {
-  id:string;
+  id: string;
   suggestion: string;
 }
 
 export interface Waypoint {
   name: string;
-  type: 'pickup' | 'dropoff';
+  type: "pickup" | "dropoff";
   order: number;
 }
 
 export interface LoadingPlanItem {
-  name: string; 
+  name: string;
   volumeM3: number;
-  quality?: string; 
-  densityTonPerM3?: string; 
-  weightTon?: string; 
+  quality?: string;
+  densityTonPerM3?: string;
+  weightTon?: string;
   loadingSuggestion?: string;
-  destinationName?: string; 
-  dropOffOrder?: number; 
-  notesOnItem?: string; 
-  companyId?: string; 
-  demandId?: string; 
+  destinationName?: string;
+  dropOffOrder?: number;
+  notesOnItem?: string;
+  companyId?: string;
+  demandId?: string;
   stockId?: string;
 }
 
 export interface LoadingPlanResponse {
-  planDetails: string; 
-  items: LoadingPlanItem[] | string; 
-  capacityUsed: string; 
-  waypoints?: Waypoint[]; 
-  optimizedRouteDescription?: string; 
+  planDetails: string;
+  items: LoadingPlanItem[] | string;
+  capacityUsed: string;
+  waypoints?: Waypoint[];
+  optimizedRouteDescription?: string;
 }
 
 export interface LoadingPlan extends LoadingPlanResponse {
   id: string;
 }
-
 
 export interface CostEstimationResponse {
   totalCost: string;
@@ -227,7 +224,7 @@ export interface ProductPerformanceData {
 export interface SystemHealthStatusItem {
   id: string;
   componentName: string;
-  status: 'OK' | 'Warning' | 'Error';
+  status: "OK" | "Warning" | "Error";
   details?: string;
 }
 
@@ -245,7 +242,8 @@ export interface StockStatusSummaryPoint {
   colorClass: string;
 }
 
-export interface PriceTrendDataPoint { // Added definition
+export interface PriceTrendDataPoint {
+  // Added definition
   periodLabel: string;
   price: number;
 }
@@ -289,38 +287,43 @@ export interface ConfirmedMatch {
   shipmentId?: string; // Optional: ID of the shipment this match belongs to
 }
 
-export interface SuccessfulMatchEntry { // For aggregated views, charts
-    id: string; // Can be month, product type, etc.
-    label: string;
-    matchCount: number;
-    totalCommission: number;
+export interface SuccessfulMatchEntry {
+  // For aggregated views, charts
+  id: string; // Can be month, product type, etc.
+  label: string;
+  matchCount: number;
+  totalCommission: number;
 }
 
 export interface AiGeneratedInvoice {
-    companyName: string;
-    billingPeriod: string;
-    invoiceDraftText: string;
-    relatedMatchIds: string[];
+  companyName: string;
+  billingPeriod: string;
+  invoiceDraftText: string;
+  relatedMatchIds: string[];
 }
 
 export interface CommissionSourceAnalysis {
-    topProducts: { product: string; totalCommission: number; percentage: number; }[];
-    topCustomers: { name: string; totalCommission: number; percentage: number; }[];
-    summary: string;
+  topProducts: {
+    product: string;
+    totalCommission: number;
+    percentage: number;
+  }[];
+  topCustomers: { name: string; totalCommission: number; percentage: number }[];
+  summary: string;
 }
 
 export interface MarketPriceCommissionAdvice {
-    productType: string;
-    marketPriceInsights: string;
-    suggestedCommissionRate: string; // e.g., "5-7%"
-    justification: string;
+  productType: string;
+  marketPriceInsights: string;
+  suggestedCommissionRate: string; // e.g., "5-7%"
+  justification: string;
 }
 
 // ---- Anomaly Detection ----
 export enum AnomalySeverity {
-  LOW = 'low',
-  MEDIUM = 'medium',
-  HIGH = 'high',
+  LOW = "low",
+  MEDIUM = "medium",
+  HIGH = "high",
 }
 
 export interface AnomalyReportItem {
@@ -329,7 +332,7 @@ export interface AnomalyReportItem {
   severity: AnomalySeverity;
   description: string; // Textual description of the anomaly
   recommendation: string; // Suggested action for the admin
-  entityType?: 'stock' | 'user' | 'demand' | 'general'; // Optional: type of entity involved
+  entityType?: "stock" | "user" | "demand" | "general"; // Optional: type of entity involved
   entityId?: string; // Optional: ID of the involved entity
   timestamp: string; // ISO date string
 }
@@ -390,22 +393,28 @@ export interface Conversation {
   unreadCount: number;
 }
 
-
 // ---- New Types for Deal Room & Negotiation ----
 export enum DealStatus {
-  NEGOTIATION = 'Negotiation',
-  AGREED = 'Agreed',
-  DISPUTED = 'Disputed',
-  CLOSED = 'Closed',
+  NEGOTIATION = "Negotiation",
+  AGREED = "Agreed",
+  DISPUTED = "Disputed",
+  CLOSED = "Closed",
 }
 
 export enum ShipmentStatus {
-  PREPARING = 'PREPARING',
-  IN_TRANSIT = 'IN_TRANSIT',
-  DELIVERED = 'DELIVERED',
+  PREPARING = "PREPARING",
+  IN_TRANSIT = "IN_TRANSIT",
+  DELIVERED = "DELIVERED",
 }
 
-export type NegotiationEventType = 'PROPOSAL' | 'COUNTER_PROPOSAL' | 'ACCEPTANCE' | 'REJECTION' | 'MESSAGE' | 'AI_SUGGESTION' | 'DEAL_CREATED';
+export type NegotiationEventType =
+  | "PROPOSAL"
+  | "COUNTER_PROPOSAL"
+  | "ACCEPTANCE"
+  | "REJECTION"
+  | "MESSAGE"
+  | "AI_SUGGESTION"
+  | "DEAL_CREATED";
 
 export interface NegotiationEvent {
   id: string;
@@ -446,24 +455,24 @@ export interface Deal {
   // Dispute details
   issueCategory?: string;
   issueDescription?: string;
-  disputedBy?: 'customer' | 'manufacturer';
+  disputedBy?: "customer" | "manufacturer";
   contractText?: string;
 }
 
 export interface AiNegotiationSuggestion {
-    summary?: string;
-    suggestedAction?: string;
-    suggestedMessageDraft?: string;
-    // For structured proposal generation
-    price?: string;
-    quantity?: string;
-    deliveryDate?: string;
-    message?: string;
+  summary?: string;
+  suggestedAction?: string;
+  suggestedMessageDraft?: string;
+  // For structured proposal generation
+  price?: string;
+  quantity?: string;
+  deliveryDate?: string;
+  message?: string;
 }
 
 export interface GeneratedDocument {
   matchId: string;
-  type: 'invoice' | 'contract' | 'cmr' | 'packing_list';
+  type: "invoice" | "contract" | "cmr" | "packing_list";
   text: string;
 }
 
@@ -482,16 +491,16 @@ export interface DemandHotlistItem {
 }
 
 export interface InventoryAnalysis {
-    pricing_review: string[];
-    demand_alignment: string[];
-    untapped_opportunities: string[];
-    listing_quality_improvement: string;
+  pricing_review: string[];
+  demand_alignment: string[];
+  untapped_opportunities: string[];
+  listing_quality_improvement: string;
 }
 
 // ---- New Types for Logistics Command Center ----
 export interface Shipment {
   id: string; // e.g., SHIP-20240725-1
-  truckDetails: { id: string; name: string; capacityM3: number; };
+  truckDetails: { id: string; name: string; capacityM3: number };
   matches: ConfirmedMatch[];
   status: ShipmentStatus;
   dispatchDate: string; // ISO
@@ -501,10 +510,10 @@ export interface Shipment {
 
 // ---- New types for Invoicing System ----
 export enum InvoiceStatus {
-  DRAFT = 'DRAFT',
-  SENT = 'SENT',
-  PAID = 'PAID',
-  OVERDUE = 'OVERDUE',
+  DRAFT = "DRAFT",
+  SENT = "SENT",
+  PAID = "PAID",
+  OVERDUE = "OVERDUE",
 }
 
 export interface InvoiceLineItem {
@@ -549,21 +558,21 @@ export interface AiDisputeAnalysis {
 
 // ---- New types for Notification System ----
 export enum NotificationType {
-    NEW_MESSAGE = 'NEW_MESSAGE',
-    DEAL_UPDATE = 'DEAL_UPDATE',
-    NEW_MATCH = 'NEW_MATCH',
-    SYSTEM_ALERT = 'SYSTEM_ALERT',
+  NEW_MESSAGE = "NEW_MESSAGE",
+  DEAL_UPDATE = "DEAL_UPDATE",
+  NEW_MATCH = "NEW_MATCH",
+  SYSTEM_ALERT = "SYSTEM_ALERT",
 }
 
 export interface Notification {
-    id: string;
-    userId: string; // The ID of the user who should receive this
-    type: NotificationType;
-    messageKey: TranslationKey;
-    messageParams?: Record<string, string | number>;
-    link: string; // e.g., '/messages', '/deals/deal-123'
-    timestamp: string; // ISO
-    isRead: boolean;
+  id: string;
+  userId: string; // The ID of the user who should receive this
+  type: NotificationType;
+  messageKey: TranslationKey;
+  messageParams?: Record<string, string | number>;
+  link: string; // e.g., '/messages', '/deals/deal-123'
+  timestamp: string; // ISO
+  isRead: boolean;
 }
 
 // --- New Type for AI User Analysis ---
@@ -574,7 +583,7 @@ export interface AiUserAnalysis {
     justification: string;
   };
   riskAssessment: {
-    level: 'Low' | 'Medium' | 'High';
+    level: "Low" | "Medium" | "High";
     reason: string;
   };
   actionableInsights: string[];
@@ -593,7 +602,7 @@ export interface SustainabilityLeaderboardItem {
   companyId: string;
   companyName: string;
   score: number; // e.g., percentage of certified stock, or total volume
-  unit: '%' | 'm³';
+  unit: "%" | "m³";
 }
 
 export interface AiSustainabilityAnalysis {
@@ -607,19 +616,23 @@ export interface AiSustainabilityAnalysis {
 // --- New Types for AI Reports Page ---
 export interface QuarterlyBusinessReview {
   period: string;
-  keyMetrics: { label: string; value: string; }[];
-  financialSummary: { label: string; value: string; }[];
-  topPerformers: { category: string; list: string[]; }[];
+  keyMetrics: { label: string; value: string }[];
+  financialSummary: { label: string; value: string }[];
+  topPerformers: { category: string; list: string[] }[];
   aiExecutiveSummary: string;
   strategicRecommendations: string[];
 }
 
 export interface MarketTrendReport {
   period: string;
-  supplyDemandBalance: { summary: string; supplyHotspots: string[]; demandHotspots: string[]; };
-  topProducts: { name: string; trend: string; }[];
-  priceAnalysis: { summary: string; examples: string[]; };
-  regionalInsights: { region: string; insight: string; }[];
+  supplyDemandBalance: {
+    summary: string;
+    supplyHotspots: string[];
+    demandHotspots: string[];
+  };
+  topProducts: { name: string; trend: string }[];
+  priceAnalysis: { summary: string; examples: string[] };
+  regionalInsights: { region: string; insight: string }[];
   aiOutlook: string;
 }
 
@@ -641,7 +654,7 @@ export interface HighRiskDeal {
   dealId: string;
   participants: string;
   riskFactor: string; // e.g., "New user with large order", "Significant price deviation"
-  riskLevel: 'High' | 'Medium' | 'Low';
+  riskLevel: "High" | "Medium" | "Low";
   recommendation: string;
 }
 
@@ -655,7 +668,7 @@ export interface UserRiskProfile {
 
 export interface MarketVolatilityAssessment {
   product: string;
-  volatilityLevel: 'Low' | 'Medium' | 'High';
+  volatilityLevel: "Low" | "Medium" | "High";
   priceTrend: string; // "Stable", "Increasing", "Decreasing"
   supplyDemandRatio: string; // "Balanced", "High Demand", "Oversupply"
   summary: string;
@@ -677,23 +690,23 @@ export interface ProcurementAnalysis {
 // --- New Type for Transactional Data Logging for AI ---
 export enum TransactionType {
   // Deal Lifecycle
-  DEAL_CREATED = 'DEAL_CREATED',
-  DEAL_STATUS_CHANGED = 'DEAL_STATUS_CHANGED', // e.g., to AGREED, DISPUTED
-  NEGOTIATION_EVENT = 'NEGOTIATION_EVENT',
+  DEAL_CREATED = "DEAL_CREATED",
+  DEAL_STATUS_CHANGED = "DEAL_STATUS_CHANGED", // e.g., to AGREED, DISPUTED
+  NEGOTIATION_EVENT = "NEGOTIATION_EVENT",
 
   // Shipment Lifecycle
-  SHIPMENT_CREATED = 'SHIPMENT_CREATED',
-  SHIPMENT_STATUS_CHANGED = 'SHIPMENT_STATUS_CHANGED', // e.g., to IN_TRANSIT, DELIVERED
+  SHIPMENT_CREATED = "SHIPMENT_CREATED",
+  SHIPMENT_STATUS_CHANGED = "SHIPMENT_STATUS_CHANGED", // e.g., to IN_TRANSIT, DELIVERED
 
   // Invoice Lifecycle
-  INVOICE_CREATED = 'INVOICE_CREATED',
-  INVOICE_STATUS_CHANGED = 'INVOICE_STATUS_CHANGED', // e.g., to PAID, OVERDUE
+  INVOICE_CREATED = "INVOICE_CREATED",
+  INVOICE_STATUS_CHANGED = "INVOICE_STATUS_CHANGED", // e.g., to PAID, OVERDUE
 
   // User Feedback
-  FEEDBACK_SUBMITTED = 'FEEDBACK_SUBMITTED',
-  
+  FEEDBACK_SUBMITTED = "FEEDBACK_SUBMITTED",
+
   // Document Generation
-  DOCUMENT_GENERATED = 'DOCUMENT_GENERATED',
+  DOCUMENT_GENERATED = "DOCUMENT_GENERATED",
 }
 
 export interface Transaction<T = any> {

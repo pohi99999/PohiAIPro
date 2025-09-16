@@ -1,5 +1,5 @@
-import React, { useCallback } from 'react';
-import { useGooglePicker } from '../../lib/hooks';
+import React, { useCallback } from "react";
+import { useGooglePicker } from "../../lib/hooks";
 
 // IMPORTANT: These values must be set in your .env.local file
 // VITE_GOOGLE_DEVELOPER_KEY=your_developer_key
@@ -9,11 +9,11 @@ const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID as string;
 
 const AdminDocumentsPage: React.FC = () => {
   const onPicked = useCallback((data: any) => {
-    if (data.action === 'picked') {
+    if (data.action === "picked") {
       const doc = data.docs[0];
       alert(`Document picked: ${doc.name}`);
       // TODO: Handle the picked document (e.g., save to Firestore)
-      console.log('Picked document:', doc);
+      console.log("Picked document:", doc);
     }
   }, []);
 
@@ -28,7 +28,9 @@ const AdminDocumentsPage: React.FC = () => {
       <div>
         <h1>Document Management</h1>
         <p className="text-red-500">
-          Google API keys are not configured. Please set VITE_GOOGLE_DEVELOPER_KEY and VITE_GOOGLE_CLIENT_ID in your .env.local file.
+          Google API keys are not configured. Please set
+          VITE_GOOGLE_DEVELOPER_KEY and VITE_GOOGLE_CLIENT_ID in your .env.local
+          file.
         </p>
       </div>
     );
@@ -38,9 +40,7 @@ const AdminDocumentsPage: React.FC = () => {
     <div>
       <h1>Document Management</h1>
       <p>Import and manage documents from Google Drive.</p>
-      <button onClick={handleAuthClick}>
-        Import from Google Drive
-      </button>
+      <button onClick={handleAuthClick}>Import from Google Drive</button>
     </div>
   );
 };

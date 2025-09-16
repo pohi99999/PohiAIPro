@@ -10,14 +10,14 @@ A Pohi AI Pro egy fejlett, valós idejű webalkalmazás, amely a Firebase platfo
 
 ### Core Technologies
 
-*   **Frontend:** React (v18) with TypeScript, built with Vite.
-*   **Backend:** Firebase Cloud Functions (Node.js v18, TypeScript).
-*   **Database:** Firestore (NoSQL).
-*   **Authentication:** Firebase Authentication.
-*   **File Storage:** Firebase Storage.
-*   **Data Services:** Firebase Data Connect.
-*   **Testing:** Vitest and React Testing Library.
-*   **AI/ML:** The project is transitioning from direct Google GenAI API calls to an agent-based architecture orchestrated by an external **BrunellaAgentSystem (BAS)**.
+- **Frontend:** React (v18) with TypeScript, built with Vite.
+- **Backend:** Firebase Cloud Functions (Node.js v18, TypeScript).
+- **Database:** Firestore (NoSQL).
+- **Authentication:** Firebase Authentication.
+- **File Storage:** Firebase Storage.
+- **Data Services:** Firebase Data Connect.
+- **Testing:** Vitest and React Testing Library.
+- **AI/ML:** The project is transitioning from direct Google GenAI API calls to an agent-based architecture orchestrated by an external **BrunellaAgentSystem (BAS)**.
 
 ### Architecture
 
@@ -44,41 +44,41 @@ Commands are run from the project root directory.
 
 #### Frontend (Vite)
 
-*   **Install Dependencies:**
-    ```bash
-    npm install
-    ```
-*   **Run Development Server:**
-    ```bash
-    npm run dev
-    ```
-*   **Build for Production:**
-    ```bash
-    npm run build
-    ```
-*   **Run Tests:**
-    ```bash
-    npm run test
-    ```
+- **Install Dependencies:**
+  ```bash
+  npm install
+  ```
+- **Run Development Server:**
+  ```bash
+  npm run dev
+  ```
+- **Build for Production:**
+  ```bash
+  npm run build
+  ```
+- **Run Tests:**
+  ```bash
+  npm run test
+  ```
 
 #### Backend (Firebase Functions)
 
 The backend functions are located in the `/functions` directory.
 
-*   **Install Dependencies:**
-    ```bash
-    cd functions
-    npm install
-    ```
-*   **Run Emulators:** To run the entire Firebase suite locally (Hosting, Functions, Firestore, etc.).
-    ```bash
-    firebase emulators:start
-    ```
-*   **Deploy Functions:**
-    ```bash
-    firebase deploy --only functions
-    ```
-    *Note: The `firebase.json` specifies a `python313` runtime, but this is incorrect. The active codebase is TypeScript/Node.js in the `functions/src` directory.*
+- **Install Dependencies:**
+  ```bash
+  cd functions
+  npm install
+  ```
+- **Run Emulators:** To run the entire Firebase suite locally (Hosting, Functions, Firestore, etc.).
+  ```bash
+  firebase emulators:start
+  ```
+- **Deploy Functions:**
+  ```bash
+  firebase deploy --only functions
+  ```
+  _Note: The `firebase.json` specifies a `python313` runtime, but this is incorrect. The active codebase is TypeScript/Node.js in the `functions/src` directory._
 
 ---
 
@@ -87,29 +87,30 @@ The backend functions are located in the `/functions` directory.
 ### Agent-Based Task Handling
 
 As per `API_CONTRACT.md`, new AI features should follow an asynchronous, task-based pattern:
+
 1.  The frontend calls a Firebase Function endpoint (e.g., `agentTask`).
 2.  This function acts as a gateway, posting a job to the external BrunellaAgentSystem (BAS) and immediately returning a `task_id`.
 3.  The frontend uses this `task_id` to poll another endpoint for the status (`PENDING`, `IN_PROGRESS`, `COMPLETED`, `FAILED`) and the final result.
 
 ### Key Agent Tasks (`task_type`)
 
-*   `PLAN_LOGISTICS`: Route and truckload optimization.
-*   `MATCH_DEMAND_STOCK`: Matching supply with demand.
-*   `GENERATE_CONTENT`: Product descriptions, price suggestions.
-*   `ANALYZE_DATA`: Running admin-level data analysis.
+- `PLAN_LOGISTICS`: Route and truckload optimization.
+- `MATCH_DEMAND_STOCK`: Matching supply with demand.
+- `GENERATE_CONTENT`: Product descriptions, price suggestions.
+- `ANALYZE_DATA`: Running admin-level data analysis.
 
 ### Code Style & Quality
 
-*   **Linting:** ESLint is configured for TypeScript/React. Run `npm run lint`.
-*   **Formatting:** Prettier is used for code formatting. Run `npm run format`.
-*   **Types:** The project uses TypeScript extensively. Global types can be found in `types.ts`.
+- **Linting:** ESLint is configured for TypeScript/React. Run `npm run lint`.
+- **Formatting:** Prettier is used for code formatting. Run `npm run format`.
+- **Types:** The project uses TypeScript extensively. Global types can be found in `types.ts`.
 
 ### Important Files for Context
 
-*   `firebase.json`: Defines the core Firebase services, emulator settings, and deployment rules.
-*   `package.json`: Lists frontend dependencies and scripts.
-*   `functions/package.json`: Lists backend (Cloud Functions) dependencies.
-*   `functions/src/index.ts`: The main entry point for all Cloud Functions.
-*   `API_CONTRACT.md`: **Crucial.** Defines the communication protocol between this project and the BrunellaAgentSystem.
-*   `workflow.md`: **Crucial.** Outlines the strategic vision for evolving the project towards an agent-based architecture.
-*   `dataconnect/`: Contains the schema and configuration for Firebase Data Connect.
+- `firebase.json`: Defines the core Firebase services, emulator settings, and deployment rules.
+- `package.json`: Lists frontend dependencies and scripts.
+- `functions/package.json`: Lists backend (Cloud Functions) dependencies.
+- `functions/src/index.ts`: The main entry point for all Cloud Functions.
+- `API_CONTRACT.md`: **Crucial.** Defines the communication protocol between this project and the BrunellaAgentSystem.
+- `workflow.md`: **Crucial.** Outlines the strategic vision for evolving the project towards an agent-based architecture.
+- `dataconnect/`: Contains the schema and configuration for Firebase Data Connect.

@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\Workflow\\PohiAIPro\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{3B0F37A2-AF0C-45EF-B6D7-C79BB78FBBF5}|PohiAiPro\\PohiAiPro.csproj|e:\\workflow\\pohiaipro\\pohiaipro\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B0F37A2-AF0C-45EF-B6D7-C79BB78FBBF5}|PohiAiPro\\PohiAiPro.csproj|solutionrelative:pohiaipro\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "E:\\Workflow\\PohiAIPro\\PohiAiPro\\Program.cs",
+              "RelativeDocumentMoniker": "PohiAiPro\\Program.cs",
+              "ToolTip": "E:\\Workflow\\PohiAIPro\\PohiAiPro\\Program.cs",
+              "RelativeToolTip": "PohiAiPro\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T14:29:40.613Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

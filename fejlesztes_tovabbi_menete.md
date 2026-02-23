@@ -110,3 +110,107 @@ Mielőtt bármilyen új funkció fejlesztésébe kezdenénk, elengedhetetlen a t
 3.  **Teljes Tesztfuttatás:** A javítás után a teljes tesztcsomagot (`npm run test`) le kell futtatni, hogy megbizonyosodjunk arról, hogy minden teszt sikeresen és memóriahiba nélkül lefut.
 
 **Amint a tesztkörnyezet stabil, a projekt visszatérhet a 2. Fázisban definiált MI képességek bővítéséhez.**
+
+---
+
+### **Projekt Állapotfelmérés (2026-02-23)**
+
+Ez az összefoglaló a teljes kódbázis átvizsgálása alapján készült, hogy átfogó képet adjon a fejlesztés jelenlegi állásáról.
+
+---
+
+#### **✅ Működő és Kész Komponensek**
+
+1.  **Tesztkörnyezet – STABIL**
+    - A korábban jelentett "JavaScript heap out of memory" memóriaszivárgási hiba elhárítva.
+    - Mind a **23 teszt sikeresen lefut** (`npm run test:run`).
+    - Lefedett területek: üzleti logika, típusok, segédfüggvények, Firebase hook-ok.
+
+2.  **Backend (Firebase Cloud Functions) – IMPLEMENTÁLVA**
+    - **API Gateway** (`functions/src/index.ts`):
+      - `POST /agent-task` – Ügynök feladat létrehozása Firestore-ban (`PENDING` státusszal).
+      - `GET /agent-task-status/:taskId` – Feladat állapotának lekérdezése.
+      - CORS middleware konfigurálva.
+    - **Auth Trigger** (`functions/src/auth.ts`):
+      - `handleNewUser` – Új felhasználó létrehozásakor automatikusan beállítja a `customer` szerepkört (custom claim) és létrehozza a Firestore profilt.
+
+3.  **Frontend Hook-ok** (`lib/hooks.ts`) – IMPLEMENTÁLVA
+    - `useCollectionQuery` – Általános Firestore kollekció-feliratkozás (cache, retry, lapozás támogatással).
+    - `useUserRole` – Felhasználói szerepkör lekérdezése.
+    - `useNotifications` – Valós idejű értesítések.
+    - `useConversations` – Valós idejű beszélgetések.
+    - `useMessages` – Valós idejű üzenetek.
+    - `useUsers` – Felhasználólista.
+    - `useGooglePicker` – Google Drive fájlválasztó integráció (váz kész).
+
+4.  **Admin Oldal – Dokumentumkezelés** (`pages/admin/AdminDocumentsPage.tsx`) – ALAPVÁZ KÉSZ
+    - Google Drive Picker integráció megvalósítva.
+    - Konfiguráció `VITE_GOOGLE_DEVELOPER_KEY` és `VITE_GOOGLE_CLIENT_ID` env változókból olvasva.
+    - **Felhasználói teendő:** Google Cloud API kulcsok beállítása `.env.local` fájlban.
+
+5.  **Frontend Routing** (`src/App.tsx`) – RÉSZLEGES
+    - `"/"` – Főoldal (placeholder).
+    - `"/admin/documents"` – AdminDocumentsPage bekötve.
+
+---
+
+#### **⚠️ Befejezetlen / Problémás Területek**
+
+1.  **Örökölt Admin Oldalak – NEM KOMPATIBILIS az Új Kódbázissal**
+    - `pages/admin/AdminBillingPage.tsx`
+    - `pages/admin/AdminMatchmakingPage.tsx`
+    - `pages/admin/AdminTruckPlanningPage.tsx`
+    - Ezek az oldalak a **régi architektúra** komponenseire hivatkoznak (`LocaleContext`, `lib/gemini`, `components/PageTitle`, stb.), amelyek **nem léteznek** az új Firebase-alapú kódbázisban.
+    - **Teendő:** Ezeket az oldalakat újra kell írni az új Firebase hook-ok és a BrunellaAgentSystem API használatával, VAGY ideiglenesen ki kell kapcsolni a routingból.
+
+2.  **`onFileUpload` Cloud Function – BLOKKOLT**
+    - A `@google/genai` csomaggal való telepítési kompatibilitási probléma miatt a PDF-elemző Cloud Function nem telepíthető.
+    - A `workflow.md` részletesen dokumentálja a hibakeresési folyamatot.
+    - **Teendő:** A `functions/` könyvtárban `npm install` futtatása, majd `firebase deploy --only functions` újrapróbálása.
+
+3.  **Függőségi Sebezhetőségek – FIGYELMET IGÉNYEL**
+    - `npm audit` eredménye: **39 sebezhetőség** (8 moderate, 30 high, 1 critical).
+    - **Teendő:** `npm audit fix` futtatása a javítható sebezhetőségek elhárítására.
+
+4.  **`functions/` ESLint Konfiguráció – HIBÁS**
+    - A `functions/.eslintrc.cjs` hivatkozik az `eslint-plugin-import` pluginra, de az nincs telepítve a `functions/` könyvtárban.
+    - **Teendő:** `cd functions && npm install eslint-plugin-import --save-dev`.
+
+5.  **Google Drive API Kulcsok – NINCS KONFIGURÁLVA**
+    - Az `AdminDocumentsPage` és a `useGooglePicker` hook a `VITE_GOOGLE_DEVELOPER_KEY` és `VITE_GOOGLE_CLIENT_ID` env változókra vár.
+    - **Teendő:** Kulcsok beszerzése a Google Cloud Console-ból és beállítása `.env.local` fájlban.
+
+---
+
+#### **📋 Javasolt Következő Lépések (Prioritás Sorrendben)**
+
+| Prioritás | Feladat | Becsült Nehézség |
+|-----------|---------|-----------------|
+| 🔴 **P1** | Örökölt admin oldalak újraírása (Billing, Matchmaking, TruckPlanning) az új Firebase hook-ok alapján | Magas |
+| 🔴 **P1** | `npm audit fix` futtatása a kritikus sebezhetőségek javítására | Alacsony |
+| 🟡 **P2** | `onFileUpload` Cloud Function telepítési problémájának megoldása | Közepes |
+| 🟡 **P2** | Google API kulcsok konfigurálása, Google Drive integráció tesztelése élesben | Alacsony |
+| 🟢 **P3** | Frontend fő routing és navigáció kiépítése (minden admin oldalhoz) | Közepes |
+| 🟢 **P3** | BrunellaAgentSystem valódi bekötése az API Gateway-be (jelenleg a task `PENDING`-ben marad) | Magas |
+
+---
+
+#### **🏗️ Architektúra Összefoglaló**
+
+```
+Frontend (React/Vite/TS)
+  ├── src/App.tsx          ← Router (2 aktív route)
+  ├── pages/admin/         ← 4 admin oldal (1 kész, 3 legacy)
+  └── lib/
+      ├── firebase.ts      ← Firebase inicializálás
+      └── hooks.ts         ← 7 React hook (mind kész)
+
+Backend (Firebase Cloud Functions)
+  └── functions/src/
+      ├── index.ts         ← API Gateway (agent-task CRUD)
+      ├── auth.ts          ← Auto role assignment (kész)
+      └── genkit-sample.ts ← Genkit minta (fejlesztés alatt)
+
+Tesztek (Vitest)
+  └── src/test/            ← 23/23 teszt ZÖLD ✅
+```
